@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  title: Annealing Benchmark Json Schema
+
+tags:
+  - name: benchmark_input_data
+    x-displayName: Benchmark Input Data Format
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/BenchmarkInputData" />
+  - name: benchmark_output_data
+    x-displayName: Benchmark Output Data Format
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/BenchmarkOutputData" />
+  - name: report_data
+    x-displayName: Report Data Format
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/ReportData"/>
+
+components:
+  schemas:
+    BenchmarkInputData:
+      $ref: "./benchmark.json"
+    BenchmarkOutputData:
+      $ref: "./result.json"
+    ReportData:
+      $ref: "./report_data.json"
+
+
+

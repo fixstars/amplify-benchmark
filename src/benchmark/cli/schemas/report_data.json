@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["benchmarks", "problems", "clients"],
+  "properties": {
+    "benchmarks": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "[0-9a-fA-F]{32}": {
+          "description": "Group ID",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["problem_id", "client_id", "results"],
+          "properties": {
+            "problem_id": {
+              "description": "Problem ID",
+              "type": "string",
+              "pattern": "[0-9a-fA-F]{32}"
+            },
+            "client_id": {
+              "description": "Client ID",
+              "type": "string",
+              "pattern": "[0-9a-fA-F]{32}"
+            },
+            "results": {
+              "description": "実験ラベル、設定時間ごとの結果",
+              "type": "object",
+              "additionalProperties": false,
+              "patternProperties": {
+                ".*": {
+                  "description": "実験ラベル。実験ラベルが空文字以外は、その実験ラベルにおけるデータで統計量を算出。実験ラベルが空文字列の場合は、group_idのすべてのデータを母集団として統計量を算出したデータを表す。",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "specified_time",
+                      "num_samples",
+                      "feasible_rate",
+                      "reach_best_rate",
+                      "time_to_solution",
+                      "raw_data"
+                    ],
+                    "properties": {
+                      "specified_time": {
+                        "description": "設定時間[ms]",
+                        "type": "number"
+                      },
+                      "num_samples": {
+                        "description": "サンプル数",
+                        "type": "integer"
+                      },
+                      "feasible_rate": {
+                        "description": "実行可能解率",
+                        "type": "number"
+                      },
+                      "reach_best_rate": {
+                        "description": "最適解到達率",
+                        "type": "number"
+                      },
+                      "time_to_solution": {
+                        "description": "Time To Solution",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["0%", "1%", "5%", "10%", "20%", "50%"],
+                        "properties": {
+                          "0%": { "type": ["number", "null"] },
+                          "1%": { "type": ["number", "null"] },
+                          "5%": { "type": ["number", "null"] },
+                          "10%": { "type": ["number", "null"] },
+                          "20%": { "type": ["number", "null"] },
+                          "50%": { "type": ["number", "null"] }
+                        }
+                      },
+                      "raw_data": {
+                        "description": "(sampling_time, target_energy)×実行可能解の数",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": ["sampling_time", "target_energy"],
+                          "properties": {
+                            "sampling_time": {
+                              "type": "number"
+                            },
+                            "target_energy": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "history": {
+              "description": "実験ラベルごとの解の履歴",
+              "type": "object",
+              "additionalProperties": false,
+              "patternProperties": {
+                ".*": {
+                  "description": "実験ラベル。実験ラベルが空文字以外は、その実験ラベルにおけるデータで統計量を算出。実験ラベルが空文字列の場合は、group_idのすべてのデータを母集団として統計量を算出したデータを表す。",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "sampling_time",
+                      "num_samples",
+                      "feasible_rate",
+                      "reach_best_rate",
+                      "time_to_solution",
+                      "target_energy"
+                    ],
+                    "properties": {
+                      "sampling_time": {
+                        "description": "サンプリング時間[ms]",
+                        "type": "number"
+                      },
+                      "num_samples": {
+                        "description": "サンプル数",
+                        "type": "integer"
+                      },
+                      "feasible_rate": {
+                        "description": "実行可能解率",
+                        "type": "number"
+                      },
+                      "reach_best_rate": {
+                        "description": "最適解到達率",
+                        "type": "number"
+                      },
+                      "time_to_solution": {
+                        "description": "Time To Solution",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["0%", "1%", "5%", "10%", "20%", "50%"],
+                        "properties": {
+                          "0%": { "type": ["number", "null"] },
+                          "1%": { "type": ["number", "null"] },
+                          "5%": { "type": ["number", "null"] },
+                          "10%": { "type": ["number", "null"] },
+                          "20%": { "type": ["number", "null"] },
+                          "50%": { "type": ["number", "null"] }
+                        }
+                      },
+                      "target_energy": {
+                        "description": "目的関数の値",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["min", "25%", "50%", "75%", "max"],
+                        "properties": {
+                          "min": {
+                            "type": ["number", "null"]
+                          },
+                          "25%": {
+                            "type": ["number", "null"]
+                          },
+                          "50%": {
+                            "type": ["number", "null"]
+                          },
+                          "75%": {
+                            "type": ["number", "null"]
+                          },
+                          "max": {
+                            "type": ["number", "null"]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "problems": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "[0-9a-fA-F]{32}": {
+          "description": "Problem ID",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "class",
+            "instance",
+            "best_known",
+            "parameters",
+            "benchmarks"
+          ],
+          "properties": {
+            "class": {
+              "description": "問題クラス",
+              "type": "string"
+            },
+            "instance": {
+              "description": "問題インスタンス",
+              "type": "string"
+            },
+            "best_known": {
+              "description": "最適解のエネルギー値",
+              "type": ["number", "null"]
+            },
+            "parameters": {
+              "description": "定式化パラメータ",
+              "type": "object"
+            },
+            "benchmarks": {
+              "description": "このproblem idを取り扱っているgroup_idのリスト",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["group_id"],
+                "properties": {
+                  "group_id": {
+                    "description": "Group ID",
+                    "type": "string",
+                    "pattern": "[0-9a-fA-F]{32}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "clients": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "[0-9a-fA-F]{32}": {
+          "description": "Client ID",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version", "parameters", "benchmarks"],
+          "properties": {
+            "name": {
+              "description": "クライアント名",
+              "type": "string"
+            },
+            "version": {
+              "description": "クライアントバージョン",
+              "type": "string"
+            },
+            "parameters": {
+              "description": "クライアントパラメータ",
+              "type": "object"
+            },
+            "benchmarks": {
+              "description": "このclient idを取り扱っているgroup_idのリスト",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["group_id"],
+                "properties": {
+                  "group_id": {
+                    "description": "Group ID",
+                    "type": "string",
+                    "pattern": "[0-9a-fA-F]{32}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

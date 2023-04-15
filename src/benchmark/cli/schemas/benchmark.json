@@ -1,0 +1,97 @@
+{
+    "description": "For validation of json files for benchmark conditions",
+    "type": "object",
+    "definitions": {
+        "problem_obj":{
+            "type": "object",
+            "required": [
+                "class",
+                "instance"
+            ],
+            "properties": {
+                "class": {
+                    "type": "string"
+                },
+                "instance": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "object"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "client_obj":{
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "proxy": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "object"
+                }
+            }
+        }
+    },
+    "properties": {
+        "client": {
+            "type": "object",
+            "$ref": "#/definitions/client_obj"
+        },
+        "jobs": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "problem"
+                ],
+                "properties": {
+                    "num_samples": {
+                        "type": "number"
+                    },
+                    "problem": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "$ref": "#/definitions/problem_obj"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/definitions/problem_obj"
+                                }
+                            }
+                        ]
+                    },
+                    "client": {
+                        "anyOf": [
+                            {
+                                "type": "object",
+                                "$ref": "#/definitions/client_obj"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/definitions/client_obj"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

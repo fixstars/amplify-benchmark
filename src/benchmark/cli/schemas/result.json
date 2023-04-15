@@ -1,0 +1,88 @@
+{
+    "description": "For validation of json files for benchmark result",
+    "type": "array",
+    "definitions": {
+        "problem_obj":{
+            "type": "object",
+            "properties": {
+                "id":{
+                    "type": "string"
+                },
+                "class": {
+                    "type": "string"
+                },
+                "instance": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "object"
+                },
+                "best_known":{
+                    "anyOf":[
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "num_vars":{
+                    "type": "object"
+                }
+            }
+        },
+        "client_obj":{
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "settings": {
+                    "type": "object"
+                },
+                "parameters": {
+                    "type": "object"
+                },
+                "version": {
+                    "type": "string"
+                },                
+                "timeout_like": {
+                    "type": "object"
+                }
+
+            }
+        }
+    },
+    "items": {
+        "type": "object",
+        "properties": {
+            "job_id": {
+                "type": "string"
+            },
+            "created_at": {
+                "type": "string"
+            },
+            "amplify_version": {
+                "type": "string"
+            },
+            "problem": {
+                "type": "object",
+                "$ref": "#/definitions/problem_obj"
+            },
+            "client": {
+                "type": "object",
+                "$ref": "#/definitions/client_obj"
+            },
+            "result": {
+                "type": "object"
+            },
+            "group_id": {
+                "type": "string"
+            },
+            "label": {
+                "type": "string"
+            }
+        }
+    }
+}

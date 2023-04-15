@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+black = "*"
+mypy = "*"
+pytest = "*"
+kaleido = "*"
+ipykernel = "*"
+isort = "*"
+pytest-cov = "*"
+colorama = "*"
+
+[packages]
+annealing-benchmark = {editable=true, path=".", index="local"}
+python-dotenv = "*"
+
+[pipenv]
+allow_prereleases = true
