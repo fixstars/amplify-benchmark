@@ -4,20 +4,19 @@ import numpy as np
 import pytest
 
 from benchmark.problem.base import gen_problem
-from benchmark.problem.sudoku import Sudoku, load_sudoku_file
+from benchmark.problem.sudoku import Sudoku, get_instance_file, load_sudoku_file
 
 from ..common import SolverSolutionSimulator as SolverSolution
 
 
 def test_load_sudoku_file(data):
-    SUDOKU_DIR = data / "SUDOKULIB"
+    instance_file = get_instance_file(instance := "9x9_h17_055")
+    problem_dir = data / "SUDOKULIB"
+    assert problem_dir.resolve() == Path(instance_file).parent.resolve()
+    assert problem_dir.resolve() / instance == Path(instance_file).resolve()
 
-    assert ".................1....23.4......4.2...2.....5..61......3......6.7.5....894......." == load_sudoku_file(
-        SUDOKU_DIR / "9x9_h17_055"
-    )
-    assert "...........1..2..3..3.45162.1...78.5374.58.218.5....3..67..43.813..86.744.8.7..16" == load_sudoku_file(
-        SUDOKU_DIR / "9x9_h39_022"
-    )
+    actual_hints = ".................1....23.4......4.2...2.....5..61......3......6.7.5....894......."
+    assert actual_hints == load_sudoku_file(instance_file)
 
 
 def test_load_sudoku_file_error(data):

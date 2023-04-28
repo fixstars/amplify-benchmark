@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 from amplify import BinaryQuadraticModel, InequalityFormulation, SolverSolution, load_qplib
 
+from ..downloader import download_instance_file
 from ..timer import print_log, timer
 from .base import Problem
 
@@ -37,7 +38,7 @@ class Qplib(Problem):
         self._best_known = best_known
 
     def make_model(self):
-        print_log(f"make model of {self._problem_parameters['instance']}")
+        print_log(f"make model of {self._instance}")
         symbols, model = make_qplib_model(
             self._instance_file,
             inequality_formulation_method=method_dict[self._problem_parameters["inequality_formulation_method"]],
@@ -68,18 +69,17 @@ class Qplib(Problem):
         return str(instance_file), best_known
 
 
-def load_best_known(instance: str) -> Optional[float]:
-    best_known: Optional[float]
-
+def load_best_known(instance: str) -> Optional[int]:
     cur_dir = Path(__file__).parent
     qplib_dir = cur_dir / "data" / "QPLIB"
-    sol_file = qplib_dir / (instance + ".sol")
 
-    if sol_file.exists():
-        with open(sol_file) as f:
-            s = f.readlines()
-        best_known = float(s[0].split()[-1])
+    best_dict: dict[str, float] = dict()
+    with open(qplib_dir / "best_solutions.csv", "r") as f:
+        for line in f.readlines():
+            ln = line.strip().split(",")
+            best_dict[ln[0]] = float(ln[1])
 
+    best_known: Optional[float] = best_dict.get(instance, None)
     return best_known
 
 
@@ -88,7 +88,7 @@ def get_instance_file(instance: str) -> str:
     qplib_dir = cur_dir / "data" / "QPLIB"
     instance_file = qplib_dir / (instance + ".qplib")
     if not instance_file.exists():
-        raise FileNotFoundError(f"instance: {instance} is not found.")
+        download_instance_file("Qplib", instance, dest=str(instance_file))
     return str(instance_file)
 
 

@@ -1,0 +1,16 @@
+/GSET
+/QAPLIB
+/QPLIB
+/TSPLIB
+/CVRPLIB
+
+# List of best known values
+!/TSPLIB/best_solutions.csv
+!/GSET/best_solutions.csv
+!/QPLIB/best_solutions.csv
+
+# unlinked solution files
+!/QAPLIB/esc32a.sln
+!/QAPLIB/esc32b.sln
+!/QAPLIB/esc32c.sln
+!/QAPLIB/esc32d.sln

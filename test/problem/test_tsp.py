@@ -1,65 +1,52 @@
-import re
 from pathlib import Path
 from typing import Any, Dict
 
 import numpy as np
 import pytest
+import requests
 
 from benchmark.problem.base import gen_problem
-from benchmark.problem.tsp import (
-    Tsp,
-    calc_tour_dist,
-    calc_tour_dist_from_problem,
-    gen_random_tsp_instance,
-    load_tsp_file,
-    load_tsp_opt_distance,
-    load_tsp_opt_tour,
-)
+from benchmark.problem.tsp import Tsp, gen_random_tsp_instance, get_instance_file, load_tsp_file, load_tsp_opt_distance
 
 from ..common import SolverSolutionSimulator as SolverSolution
 
 
-def test_load_tsp_file(data):
-    TSP_DIR = data / "TSPLIB"
-    assert 14 == load_tsp_file(str(TSP_DIR / "burma14.tsp"))[0]
-    assert 16 == load_tsp_file(str(TSP_DIR / "ulysses16.tsp"))[0]
-    assert 29 == load_tsp_file(str(TSP_DIR / "bayg29.tsp"))[0]
-    assert 51 == load_tsp_file(str(TSP_DIR / "eil51.tsp"))[0]
-
-
-def test_load_tsp_file_error(data):
+def test_load_tsp_file_error(data, cleanup):
     TSP_DIR = data / "TSPLIB"
     with pytest.raises(FileNotFoundError):
         load_tsp_file(str(TSP_DIR / "file_not_found.tsp"))
     with pytest.raises(RuntimeError):
-        load_tsp_file(str(TSP_DIR / "pr2392.tsp"))
-
-
-def test_load_tsp_opt(data):
-    assert 3323 == load_tsp_opt_distance("burma14")
-    assert 6859 == load_tsp_opt_distance("ulysses16")
-    assert 1610 == load_tsp_opt_distance("bayg29")
-    assert 426 == load_tsp_opt_distance("eil51")
+        instance_file = get_instance_file("pr2392")
+        load_tsp_file(instance_file)
+        cleanup(instance_file)
+    with pytest.raises(requests.HTTPError):
+        get_instance_file("hoge")
 
 
 @pytest.mark.parametrize(
-    "instance, best_known, kp",
+    "instance, n, best_known",
     [
-        ("burma14", 3323, 0.25),
-        ("burma14", 3323, 1.0),
-        ("ulysses16", 6859, 0.25),
-        ("bayg29", 1610, 0.25),
-        ("eil51", 426, 0.25),
+        ("burma14", 14, 3323),
+        ("ulysses16", 16, 6859),
+        ("bayg29", 29, 1610),
+        ("eil51", 51, 426),
+        ("kroA100", 100, 21282),
     ],
 )
-def test_tsp_problem(instance: str, best_known: float, kp: float):
-    kwargs: dict = {"instance": instance, "constraint_weight": kp}
+def test_load_tsp_file(instance: str, n: int, best_known: int, cleanup):
+    instance_file = get_instance_file(instance)
+    assert n == load_tsp_file(instance_file)[0]
+    assert best_known == load_tsp_opt_distance(instance)
+
+    kwargs: dict = {"instance": instance, "constraint_weight": 0.5}
     problem = Tsp(**kwargs)
     assert instance == problem.get_input_parameter()["instance"]
-    assert kp == problem.get_input_parameter()["parameters"]["constraint_weight"]
+    assert 0.5 == problem.get_input_parameter()["parameters"]["constraint_weight"]
 
     problem.make_model()  # call `make_model()` for loading TSPLIB file
     assert best_known == problem.get_input_parameter()["best_known"]
+
+    cleanup(instance_file)
 
 
 def test_gen_random_tsp_instance():
@@ -103,11 +90,11 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate():
+def test_evaluate(cleanup):
     expected: Dict[str, Any] = dict()
 
     # infeasible case
-    problem = Tsp(instance="burma14")
+    problem = Tsp(instance := "burma14")
     problem.make_model()
     expected = {"label": "total distances", "value": None, "path": ""}
     assert expected == problem.evaluate(SolverSolution(is_feasible=False))
@@ -129,29 +116,4 @@ def test_evaluate():
     result = problem.evaluate(SolverSolution(is_feasible=True, values=values.reshape((14 * 14)).tolist()))
     assert expected == result
 
-
-@pytest.mark.parametrize(
-    "instance",
-    ["ulysses16", "bayg29", "eil51", "kroA100", "gr96", "gr202"],
-)
-def test_calc_tour_dist(instance: str, data):
-    TSP_DIR = data / "TSPLIB"
-    problem_file = str(TSP_DIR / (instance + ".tsp"))
-    sol_file = str(TSP_DIR / (instance + ".opt.tour"))
-    ncity_ = int(re.sub(r"[^0-9]", "", instance))
-    ncity, distances, locations = load_tsp_file(problem_file)
-    assert ncity_ == ncity
-    assert ncity_ == distances.shape[0]
-
-    tour, dist = load_tsp_opt_tour(str(problem_file), str(sol_file))
-    opt_dist = load_tsp_opt_distance(instance)
-
-    assert len(tour) == ncity
-    assert dist == opt_dist
-
-    tour_0_index = [i - 1 for i in tour]
-    assert dist == calc_tour_dist(tour_0_index, distances)
-    assert opt_dist == calc_tour_dist(tour_0_index, distances)
-
-    assert dist == calc_tour_dist_from_problem(tour, problem_file)
-    assert opt_dist == calc_tour_dist_from_problem(tour, problem_file)
+    cleanup(get_instance_file(instance))

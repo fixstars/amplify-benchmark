@@ -3,15 +3,27 @@ from pathlib import Path
 import pytest
 
 from benchmark.problem.base import gen_problem
-from benchmark.problem.maxcut import MaxCut, load_gset_matrix, load_gset_opt
+from benchmark.problem.maxcut import MaxCut, get_instance_file, load_gset_matrix, load_gset_opt
 
 from ..common import SolverSolutionSimulator as SolverSolution
 
 
-def test_load_gset_matrix(data):
-    MAXCUT_DIR = data / "GSET"
-    assert 800 * 800 == load_gset_matrix(MAXCUT_DIR / "G1").size
-    assert 800 * 800 == load_gset_matrix(MAXCUT_DIR / "G11").size
+@pytest.mark.parametrize(
+    "instance, N, best_known",
+    [
+        ("G1", 800, -11624),
+        ("G11", 800, -564),
+        ("G32", 2000, -1410),
+    ],
+)
+def test_load_gset_instance(instance, N, best_known, cleanup):
+    instance_file = get_instance_file(instance)
+    problem_dir = Path(__file__) / "../../../src/benchmark/problem/data/GSET/"
+    assert problem_dir.resolve() == Path(instance_file).parent.resolve()
+    assert N * N == load_gset_matrix(instance_file).size
+    assert best_known == load_gset_opt(instance)
+
+    cleanup(instance_file)
 
 
 def test_load_gset_matrix_error(data):
@@ -33,10 +45,11 @@ def test_load_gset_opt():
         ("G21", -931),
     ],
 )
-def test_maxcut_problem(instance: str, best_known: int):
+def test_maxcut_problem(instance: str, best_known: int, cleanup):
     problem = MaxCut(instance)
     assert instance == problem.get_input_parameter()["instance"]
     assert best_known == problem.get_input_parameter()["best_known"]
+    cleanup(get_instance_file(instance))
 
 
 def test_load_local_file():
@@ -49,8 +62,10 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate():
-    problem = MaxCut("G1")
+def test_evaluate(cleanup):
+    problem = MaxCut(instance := "G1")
     best_known = 11624
     expected = {"label": "Maximum Cuts", "value": best_known}
     assert expected == problem.evaluate(SolverSolution(energy=-best_known))
+
+    cleanup(get_instance_file(instance))

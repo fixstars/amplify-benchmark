@@ -4,6 +4,7 @@ from typing import Dict, Optional
 import numpy as np
 from amplify import BinaryMatrix, BinaryQuadraticModel, SolverSolution
 
+from ..downloader import download_instance_file
 from ..timer import print_log, timer
 from .base import Problem
 
@@ -38,10 +39,14 @@ class MaxCut(Problem):
 
 def get_instance_file(instance: str) -> str:
     cur_dir = Path(__file__).parent
-    gset_dir = cur_dir / "data" / "GSET"
-    instance_file = gset_dir / instance
+    maxcut_dir = cur_dir / "data" / "GSET"
+
+    if not maxcut_dir.exists():
+        maxcut_dir.mkdir(parents=True)
+
+    instance_file = maxcut_dir / instance
     if not instance_file.exists():
-        raise FileNotFoundError(f"instance: {instance} is not found.")
+        download_instance_file("MaxCut", instance, dest=str(instance_file))
     return str(instance_file)
 
 
@@ -65,8 +70,8 @@ def load_gset_matrix(problem_file: str) -> np.ndarray:
 
 def load_gset_opt(instance) -> Optional[int]:
     cur_dir = Path(__file__).parent
-    gset_dir = cur_dir / "data" / "GSET"
-    sol_file = gset_dir / "gset_best.csv"
+    maxcut_dir = cur_dir / "data" / "GSET"
+    sol_file = maxcut_dir / "best_solutions.csv"
 
     best_dict: Dict[str, int] = {}
     with open(sol_file, "r") as f:

@@ -4,6 +4,7 @@ from typing import Dict, Optional, Tuple, Union
 import networkx
 import numpy as np
 import tsplib95
+import vrplib
 from amplify import BinaryQuadraticModel, BinarySymbolGenerator, IntegerEncodingMethod, SolverSolution, einsum
 from amplify.constraint import less_equal, one_hot, penalty
 
@@ -94,15 +95,21 @@ class Cvrp(Problem):
 
     @staticmethod
     def __load(instance: str, path: Optional[str] = None) -> Tuple[int, int, np.ndarray, list, dict, int, int, int]:
+        best_known: Optional[float] = None
+        nvehicle: Optional[int] = None
+
         if path is not None:
             instance_file = path
         else:
             instance_file = get_instance_file(instance)
 
         capacity, dimension, distances, demand, coord, depot = load_cvrp_file(instance_file)
-        instance_opt_file = get_instance_opt_file(instance)
-        best_known, nvehicle = load_cvrp_opt_distance_and_nvehicle(instance_opt_file)
 
+        if path is not None:
+            pass
+        else:
+            instance_opt_file = get_sol_file(instance)
+            best_known, nvehicle = load_cvrp_opt_distance_and_nvehicle(instance_opt_file)
         return capacity, dimension, distances, demand, coord, depot, nvehicle, best_known
 
     @staticmethod
@@ -132,28 +139,28 @@ class Cvrp(Problem):
                 return longest_possible_length
         return longest_possible_length
 
-    @staticmethod
-    def __load_best_known(instance: str) -> Tuple[int, int]:
-        instance_opt_file = get_instance_opt_file(instance)
-        return load_cvrp_opt_distance_and_nvehicle(instance_opt_file)
-
 
 def get_instance_file(instance: str) -> str:
     cur_dir = Path(__file__).parent
     cvrp_dir = cur_dir / "data" / "CVRPLIB"
+    if not cvrp_dir.exists():
+        cvrp_dir.mkdir(parents=True)
+
     instance_file = cvrp_dir / (instance + ".vrp")
     if not instance_file.exists():
-        raise FileNotFoundError(f"instance: {instance} is not found.")
+        vrplib.download_instance(instance, str(instance_file))
+
     return str(instance_file)
 
 
-def get_instance_opt_file(instance: str) -> Path:
+def get_sol_file(instance: str) -> str:
     cur_dir = Path(__file__).parent
     cvrp_dir = cur_dir / "data" / "CVRPLIB"
-    instance_file = cvrp_dir / (instance + ".sol")
-    if not instance_file.exists():
-        raise FileNotFoundError(f"instance: {instance} is not found.")
-    return instance_file
+
+    sol_file = cvrp_dir / (instance + ".sol")
+    if not sol_file.exists():
+        vrplib.download_solution(instance, str(sol_file))
+    return str(sol_file)
 
 
 class NumCitiesError(Exception):

@@ -1,4 +1,3 @@
-import re
 from pathlib import Path
 from typing import Dict, Optional, Tuple, Union
 
@@ -10,6 +9,7 @@ from amplify import BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution,
 from amplify.constraint import one_hot
 from tsplib95.utils import RadianGeo
 
+from ..downloader import download_instance_file
 from ..timer import print_log, timer
 from .base import Problem
 
@@ -75,11 +75,6 @@ class Tsp(Problem):
             ncity, distance_matrix, locations = load_tsp_file(instance_file)
             best_known = load_tsp_opt_distance(instance)
 
-            opt_file = Path(instance_file).parent / (instance + ".opt.tour")
-            if opt_file.exists():
-                opt_tour, opt_distance = load_tsp_opt_tour(instance_file, str(opt_file))
-                assert opt_distance == best_known
-
         return ncity, distance_matrix, locations, best_known
 
 
@@ -88,7 +83,8 @@ def get_instance_file(instance: str) -> str:
     tsp_dir = cur_dir / "data" / "TSPLIB"
     instance_file = tsp_dir / (instance + ".tsp")
     if not instance_file.exists():
-        raise FileNotFoundError(f"instance: {instance} is not found.")
+        download_instance_file("Tsp", instance, dest=str(instance_file))
+        assert instance_file.exists()
     return str(instance_file)
 
 
@@ -133,21 +129,15 @@ def load_tsp_file(problem_file: str) -> Tuple[int, np.ndarray, Optional[np.ndarr
     return ncity, distance_matrix, locations
 
 
-def load_tsp_opt_tour(problem_file: str, sol_file: str) -> Tuple[list, int]:
-    problem = tsplib95.load(problem_file)
-    opt = tsplib95.load(sol_file)
-    opt_distance = problem.trace_tours(opt.tours)[0]
-    return opt.tours[0], opt_distance
-
-
 def load_tsp_opt_distance(instance: str) -> Optional[int]:
     cur_dir = Path(__file__).parent
     tsp_dir = cur_dir / "data" / "TSPLIB"
-    with open(tsp_dir / "bestSolutions.txt", "r") as f:
-        lines = f.readlines()
 
-    best_values = [re.split(r":", line_str.strip()) for line_str in lines]
-    best_dict = {k[0].strip(): int(k[1]) for k in best_values}
+    best_dict: dict[str, int] = dict()
+    with open(tsp_dir / "best_solutions.csv", "r") as f:
+        for line in f.readlines():
+            ln = line.split(",")
+            best_dict[ln[0]] = int(ln[1])
 
     best_known: Optional[int] = best_dict.get(instance, None)
     return best_known

@@ -5,34 +5,59 @@ import numpy as np
 import pytest
 
 from benchmark.problem.base import gen_problem
-from benchmark.problem.cvrp import Cvrp, load_cvrp_file, load_cvrp_opt_distance_and_nvehicle
+from benchmark.problem.cvrp import (
+    Cvrp,
+    get_instance_file,
+    get_sol_file,
+    load_cvrp_file,
+    load_cvrp_opt_distance_and_nvehicle,
+)
 
 from ..common import SolverSolutionSimulator as SolverSolution
 
 
-def test_load_tsp_file(data):
-    CVRP_DIR = data / "CVRPLIB"
-    assert 22 == load_cvrp_file(CVRP_DIR / "E-n22-k4.vrp")[1]
-    assert 32 == load_cvrp_file(CVRP_DIR / "A-n32-k5.vrp")[1]
-    assert 45 == load_cvrp_file(CVRP_DIR / "F-n45-k4.vrp")[1]
-    assert 200 == load_cvrp_file(CVRP_DIR / "M-n200-k17.vrp")[1]
+@pytest.mark.parametrize(
+    "instance, ncity, best_known",
+    [
+        ("E-n22-k4", 22, 375),
+        ("A-n32-k5", 32, 784),
+        ("F-n45-k4", 45, 724),
+        ("M-n200-k17", 200, 1275),
+    ],
+)
+def test_load_cvrp_file(instance: str, ncity: int, best_known: int, data, cleanup):
+    instance_file = get_instance_file(instance)
+
+    problem_dir = data / "CVRPLIB"
+    assert problem_dir.resolve() == Path(instance_file).parent.resolve()
+    assert ncity == load_cvrp_file(instance_file)[1]
+    cleanup(instance_file)
 
 
-def test_load_tsp_file_error(data):
+def test_load_cvrp_file_error(data):
     CVRP_DIR = data / "CVRPLIB"
     with pytest.raises(FileNotFoundError):
         load_cvrp_file(CVRP_DIR / "file_not_found.vrp")
 
 
-def test_load_tsp_opt(data):
-    CVRP_DIR = data / "CVRPLIB"
-    assert 375, 4 == load_cvrp_opt_distance_and_nvehicle(CVRP_DIR / "E-n22-k4.sol")
-    assert 784, 5 == load_cvrp_opt_distance_and_nvehicle(CVRP_DIR / "A-n32-k5.sol")
-    assert 724, 4 == load_cvrp_opt_distance_and_nvehicle(CVRP_DIR / "F-n45-k4.sol")
-    assert 1275, 17 == load_cvrp_opt_distance_and_nvehicle(CVRP_DIR / "M-n200-k17.sol")
+@pytest.mark.parametrize(
+    "instance, opt_nvehicle, opt_cost",
+    [
+        ("E-n22-k4", 4, 375),
+        ("A-n32-k5", 5, 784),
+        ("F-n45-k4", 4, 724),
+        ("M-n200-k17", 17, 1275),
+    ],
+)
+def test_load_cvrp_opt(instance: str, opt_nvehicle: int, opt_cost: int, cleanup):
+    sol_file = get_sol_file(instance)
+    opt_solution = load_cvrp_opt_distance_and_nvehicle(sol_file)
+    assert opt_cost == opt_solution[0]
+    assert opt_nvehicle == opt_solution[1]
+    cleanup(sol_file)
 
 
-def test_load_tsp_opt_error(data):
+def test_load_cvrp_opt_error(data):
     CVRP_DIR = data / "CVRPLIB"
     with pytest.raises(FileNotFoundError):
         assert 3323 == load_cvrp_opt_distance_and_nvehicle("file_not_found.vrp")
@@ -50,7 +75,7 @@ def test_load_tsp_opt_error(data):
         ("M-n200-k17", 1275, 0.25),
     ],
 )
-def test_cvrp_problem(instance: str, best_known: float, kp: float):
+def test_cvrp_problem(instance: str, best_known: float, kp: float, cleanup):
     kwargs: dict = {"instance": instance, "constraint_weight": kp}
     problem = Cvrp(**kwargs)
     assert instance == problem.get_input_parameter()["instance"]
@@ -58,6 +83,9 @@ def test_cvrp_problem(instance: str, best_known: float, kp: float):
     assert kp == problem.get_input_parameter()["parameters"]["constraint_weight"]
     assert "default" == problem.get_input_parameter()["parameters"]["method"]
     assert 2 == problem.get_input_parameter()["parameters"]["scale"]
+
+    cleanup(get_instance_file(instance))
+    cleanup(get_sol_file(instance))
 
 
 def test_load_local_file():
@@ -70,11 +98,11 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate():
+def test_evaluate(cleanup):
     expected: Dict[str, Any] = dict()
 
     # infeasible case
-    problem = Cvrp(instance="E-n22-k4")
+    problem = Cvrp(instance := "E-n22-k4")
     problem.make_model()
     expected = {"label": "total distances", "value": None, "path": ""}
     assert expected == problem.evaluate(SolverSolution(is_feasible=False))
@@ -106,3 +134,6 @@ def test_evaluate():
         )
     )
     assert expected == result
+
+    cleanup(get_instance_file(instance))
+    cleanup(get_sol_file(instance))

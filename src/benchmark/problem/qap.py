@@ -1,5 +1,4 @@
 import re
-from copy import copy
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -7,6 +6,7 @@ import numpy as np
 from amplify import BinaryMatrix, BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution
 from amplify.constraint import one_hot
 
+from ..downloader import download_instance_file
 from ..timer import print_log, timer
 from .base import Problem
 
@@ -56,25 +56,41 @@ class Qap(Problem):
         ncity: int
         distances: np.ndarray
         flows: np.ndarray
-        best_known: Optional[float]
+        best_known: Optional[float] = None
 
         if path is not None:
             ncity, distances, flows = load_qap_file(path)
         else:
             instance_file = get_instance_file(instance)
             ncity, distances, flows = load_qap_file(str(instance_file))
+            sol_file = get_sol_file(instance)
+            best_known = load_qap_opt(sol_file)
 
-        best_known = load_qap_opt(instance)
         return ncity, distances, flows, best_known
 
 
 def get_instance_file(instance: str) -> str:
     cur_dir = Path(__file__).parent
     qap_dir = cur_dir / "data" / "QAPLIB"
+    if not qap_dir.exists():
+        qap_dir.mkdir(parents=True)
+
     instance_file = qap_dir / (instance + ".dat")
     if not instance_file.exists():
-        raise FileNotFoundError(f"instance: {instance} is not found.")
+        download_instance_file("Qap", instance, dest=str(instance_file))
     return str(instance_file)
+
+
+def get_sol_file(instance: str) -> str:
+    cur_dir = Path(__file__).parent
+    qap_dir = cur_dir / "data" / "QAPLIB"
+    if not qap_dir.exists():
+        qap_dir.mkdir(parents=True)
+
+    sol_file = qap_dir / (instance + ".sln")
+    if not sol_file.exists():
+        pass
+    return str(sol_file)
 
 
 def load_qap_file(problem_file: str) -> Tuple[int, np.ndarray, np.ndarray]:
@@ -89,72 +105,36 @@ def load_qap_file(problem_file: str) -> Tuple[int, np.ndarray, np.ndarray]:
             dist : distances between each cities.
             flow : flows between each cities.
     """
-    data: list = []
-    tmp: list = []
+    data = list()
+
+    def parse_numbers(string):
+        numbers = string.split()
+        return [int(num) for num in numbers]
 
     with open(problem_file) as f:
         lines = f.read().splitlines()
+
         for line in lines:
-            line = re.sub("^ +", "", line)
-            if line == "":
-                data.append(tmp)
-                tmp = []
-                continue
-            tmp.append(re.split(" +", line.strip()))
-        data.append(tmp)  # end of file is not '\n'
+            numbers = parse_numbers(line)
+            data.extend(numbers)
 
-    int_data = []
-    for i in data:
-        tmp = []
-        for j in i:
-            tmp.append(list(map(lambda x: int(x), j)))
+    N = data[0]
+    assert len(data) == 2 * N * N + 1, RuntimeError(f"parse error. \nfile path: {problem_file}")
 
-        if len(tmp) != 0:
-            int_data.append(tmp)
-        else:
-            continue
+    dist = np.array(data[1 : N * N + 1]).reshape((N, N))
+    flow = np.array(data[N * N + 1 :]).reshape((N, N))
 
-    n = int_data[0][0][0]
-
-    if len(int_data[1][0]) == n:
-        dist = np.zeros((n, n))
-        flow = np.zeros((n, n))
-        for i in range(n):
-            for j in range(n):
-                dist[i][j] = int_data[1][i][j]
-                flow[i][j] = int_data[2][i][j]
-
-    else:
-        matrix_a = []
-        matrix_b = []
-        for w_l in int_data[1]:
-            matrix_a += copy(w_l)
-        for w_l in int_data[2]:
-            matrix_b += copy(w_l)
-
-        dist = np.zeros((n, n))
-        flow = np.zeros((n, n))
-        for i in range(n):
-            for j in range(n):
-                dist[i][j] = matrix_a.pop(0)
-                flow[i][j] = matrix_b.pop(0)
-
-    return n, dist, flow
+    return N, dist, flow
 
 
-def load_qap_opt(instance: str) -> Optional[int]:
-    cur_dir = Path(__file__).parent
-    qap_dir = cur_dir / "data" / "QAPLIB"
-    sol_file = qap_dir / (instance + ".sln.txt")
-
-    best_known: Optional[int]
+def load_qap_opt(sol_file: str) -> Optional[int]:
+    best_known: Optional[int] = None
+    sol_file = Path(sol_file)
     if sol_file.exists():
         with open(sol_file) as f:
             lines = f.read().splitlines()
             first = re.split(" +", re.sub("^ +", "", lines[0]))
             best_known = int(first[1])
-    else:
-        best_known = None
 
     return best_known
 

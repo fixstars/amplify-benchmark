@@ -4,19 +4,9 @@ import numpy as np
 import pytest
 
 from benchmark.problem.base import gen_problem
-from benchmark.problem.qap import Qap, load_qap_file, load_qap_opt
+from benchmark.problem.qap import Qap, get_instance_file, get_sol_file, load_qap_file, load_qap_opt
 
 from ..common import SolverSolutionSimulator as SolverSolution
-
-
-def test_load_qap_file(data):
-    QAP_DIR = data / "QAPLIB"
-    assert 12 == load_qap_file(str(QAP_DIR / "chr12a.dat"))[0]
-    assert 18 == load_qap_file(str(QAP_DIR / "chr18a.dat"))[0]
-    assert 32 == load_qap_file(str(QAP_DIR / "esc32a.dat"))[0]
-    assert 100 == load_qap_file(str(QAP_DIR / "sko100a.dat"))[0]
-    assert 150 == load_qap_file(str(QAP_DIR / "tai150b.dat"))[0]
-    assert 256 == load_qap_file(str(QAP_DIR / "tai256c.dat"))[0]
 
 
 def test_load_qap_file_error(data):
@@ -25,30 +15,38 @@ def test_load_qap_file_error(data):
         load_qap_file(str(QAP_DIR / "file_not_found.dat"))
 
 
-def test_load_qap_opt(data):
-    assert 9552 == load_qap_opt("chr12a")
-    assert 11098 == load_qap_opt("chr18a")
-    assert 130 == load_qap_opt("esc32a")
-    assert 152002 == load_qap_opt("sko100a")
-    assert 498896643 == load_qap_opt("tai150b")
-    assert 44759294 == load_qap_opt("tai256c")
-
-
 @pytest.mark.parametrize(
-    "instance, best_known, kp",
+    "instance, n, best_known",
     [
-        ("chr12a", 9552, 0.25),
-        ("chr12a", 9552, 0.25),
-        ("chr18a", 11098, 0.25),
-        ("esc32a", 130, 0.25),
-        ("sko100a", 152002, 0.25),
+        ("chr12a", 12, 9552),
+        ("chr18a", 18, 11098),
+        ("esc32a", 32, 130),
+        ("esc32e", 32, 2),
+        ("sko100a", 100, 152002),
+        ("tai150b", 150, 498896643),
+        ("tai256c", 256, 44759294),
     ],
 )
-def test_qap_problem(instance: str, best_known: float, kp: float):
-    kwargs: dict = {"instance": instance, "constraint_weight": kp}
+def test_load_qap(instance, n, best_known, cleanup):
+    instance_file = get_instance_file(instance)
+    N, dist, flow = load_qap_file(instance_file)
+    assert n == N
+
+    # test for load opt solution
+    sol_file = get_sol_file(instance)
+    load_best_known = load_qap_opt(sol_file)
+
+    assert best_known == load_best_known
+
+    # test for problem class
+    kwargs: dict = {"instance": instance}
     problem = Qap(**kwargs)
     assert instance == problem.get_input_parameter()["instance"]
     assert best_known == problem.get_input_parameter()["best_known"]
+
+    cleanup(instance_file)
+    if instance != "esc32a":
+        cleanup(sol_file)
 
 
 def test_load_local_file():
@@ -61,9 +59,9 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate():
+def test_evaluate(cleanup):
     # infeasible case
-    problem = Qap(instance="chr12a")
+    problem = Qap(instance := "chr12a")
     problem.make_model()
     assert {"label": "cost", "values": None, "placement": ""} == problem.evaluate(SolverSolution(is_feasible=False))
 
@@ -81,3 +79,6 @@ def test_evaluate():
     assert expected == problem.evaluate(
         SolverSolution(is_feasible=True, values=values.reshape((12 * 12)).tolist(), energy=9552)
     )
+
+    cleanup(get_instance_file(instance))
+    cleanup(get_sol_file(instance))
