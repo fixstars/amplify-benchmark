@@ -1,0 +1,27 @@
+stages:
+  - push
+
+sync-repositories:
+  stage: push
+  tags:
+    - docker
+  image: bitnami/git
+  script:
+    # prepare remote repositories
+    - git remote set-url origin https://gitlab-ci-token:$GITLAB_TOKEN@${CI_REPOSITORY_URL##*@}
+    - git config remote.github.url >&- && git remote set-url github https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/fixstars/amplify-benchmark-test.git || git remote add github https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/fixstars/amplify-benchmark-test.git
+    - git config user.email "noreply@fixstars.com"
+    - git config user.name "GitLab Bot"
+    - git fetch github main
+    - git fetch origin main develop
+    - git switch develop
+    - git reset --hard origin/develop
+    - git clean -xfd
+    # rebase and push
+    - git status
+    - git rebase github/main
+    - git push origin develop
+    - git push origin develop:main
+    - git push github develop:main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
