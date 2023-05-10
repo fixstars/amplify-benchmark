@@ -1,0 +1,751 @@
+[
+    {
+        "job_id": "a604f241-6a00-4448-a739-a26814bffb7b",
+        "created_at": "2023-04-19T10:27:34.105002",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "f74b25ec9a1ef8dbde4cd1691d12152c",
+            "class": "Tsp",
+            "instance": "eil51",
+            "parameters": {
+                "constraint_weight": 1.0
+            },
+            "best_known": 426,
+            "num_vars": {
+                "input": 2601,
+                "logical": 2601,
+                "physical": 2601
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 875.5709199999999,
+            "solutions": [
+                {
+                    "target_energy": 479.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 479.0,
+                    "constraints": {
+                        "satisfied": 102,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 479,
+                        "path": "42 6 22 25 7 30 27 2 35 34 19 28 20 49 15 8 33 29 38 9 48 37 10 45 50 5 47 26 0 21 1 31 4 36 44 32 14 43 41 39 18 40 12 17 3 16 11 46 13 24 23"
+                    },
+                    "sampling_time": 101.161817
+                },
+                {
+                    "target_energy": 457.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 457.0,
+                    "constraints": {
+                        "satisfied": 102,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 457,
+                        "path": "33 49 15 1 21 0 31 10 45 50 11 46 17 3 16 4 37 48 8 20 28 19 35 34 2 27 30 25 7 47 26 5 22 6 42 23 13 24 12 39 18 40 41 36 43 14 44 32 38 9 29"
+                    },
+                    "sampling_time": 177.858769
+                },
+                {
+                    "target_energy": 443.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 443.0,
+                    "constraints": {
+                        "satisfied": 102,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 443,
+                        "path": "33 49 15 1 21 0 31 10 50 45 11 46 3 16 36 4 37 48 8 20 28 19 35 34 2 27 30 25 7 47 26 5 22 6 42 23 13 24 17 12 40 39 18 41 43 14 44 32 38 9 29"
+                    },
+                    "sampling_time": 251.559893
+                },
+                {
+                    "target_energy": 430.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 430.0,
+                    "constraints": {
+                        "satisfied": 102,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 430,
+                        "path": "20 15 49 33 29 8 48 9 38 32 44 14 43 41 18 39 40 12 17 24 13 23 42 6 22 47 5 26 50 45 11 46 3 16 36 4 37 10 31 0 21 7 25 30 27 2 35 34 19 1 28"
+                    },
+                    "sampling_time": 319.417705
+                },
+                {
+                    "target_energy": 426.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 426.0,
+                    "constraints": {
+                        "satisfied": 102,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 426,
+                        "path": "20 15 49 33 29 8 48 9 38 32 44 14 43 41 39 18 40 12 24 13 23 42 6 22 47 5 26 50 45 11 46 17 3 16 36 4 37 10 31 0 21 7 25 30 27 2 35 34 19 1 28"
+                    },
+                    "sampling_time": 384.289637
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 11,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "bb1917c5827db87bd1869742177cf069",
+        "label": "test run",
+        "error": ""
+    },
+    {
+        "job_id": "61f9c365-f534-49b4-823a-d0d7b3372d0b",
+        "created_at": "2023-04-19T10:27:33.388270",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "bb02997e4fc73bca145f05bd5e69bc0b",
+            "class": "Tsp",
+            "instance": "random30",
+            "parameters": {
+                "constraint_weight": 1.0,
+                "seed": 0
+            },
+            "best_known": null,
+            "num_vars": {
+                "input": 900,
+                "logical": 900,
+                "physical": 900
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 945.971319,
+            "solutions": [
+                {
+                    "target_energy": 5.229843650494899,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 5.229843650494983,
+                    "constraints": {
+                        "satisfied": 60,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 5,
+                        "path": "10 9 6 3 11 2 16 14 25 1 18 22 0 15 13 8 17 12 20 24 27 7 23 29 28 21 26 4 5 19"
+                    },
+                    "sampling_time": 75.73471699999999
+                },
+                {
+                    "target_energy": 5.168086219011222,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 5.1680862190113075,
+                    "constraints": {
+                        "satisfied": 60,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 5,
+                        "path": "10 9 6 3 11 0 22 18 1 25 14 16 2 15 13 8 17 12 7 23 27 24 20 29 28 21 26 4 5 19"
+                    },
+                    "sampling_time": 176.040196
+                },
+                {
+                    "target_energy": 5.113152581590095,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 5.113152581590175,
+                    "constraints": {
+                        "satisfied": 60,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 5,
+                        "path": "10 9 6 3 11 0 22 18 1 25 14 16 2 15 13 8 17 12 20 24 27 7 23 29 28 21 26 4 5 19"
+                    },
+                    "sampling_time": 221.81876
+                },
+                {
+                    "target_energy": 5.113152581590095,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 5.113152581590178,
+                    "constraints": {
+                        "satisfied": 60,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 5,
+                        "path": "17 8 13 15 2 16 14 25 1 18 22 0 11 3 6 9 10 19 5 4 26 21 28 29 23 7 27 24 20 12"
+                    },
+                    "sampling_time": 264.75615
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 15,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "ccba30ed4c047889aeacceb141b9940e",
+        "label": "test run",
+        "error": ""
+    },
+    {
+        "job_id": "24d32300-28c4-49bf-b37b-ca27388d6156",
+        "created_at": "2023-04-19T10:27:33.316837",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "47a834f9c28b301a3faaaf60ace6715b",
+            "class": "Qap",
+            "instance": "chr12a",
+            "parameters": {
+                "constraint_weight": 1.0
+            },
+            "best_known": 9552,
+            "num_vars": {
+                "input": 144,
+                "logical": 144,
+                "physical": 144
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 920.181311,
+            "solutions": [
+                {
+                    "target_energy": 9552.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 9552.0,
+                    "constraints": {
+                        "satisfied": 24,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "cost",
+                        "values": 9552.0,
+                        "placement": "6 4 11 1 0 2 8 10 9 5 7 3"
+                    },
+                    "sampling_time": 59.06582
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 12,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "19f72e4925ffb089b1198d9792e2bcfc",
+        "label": "test run",
+        "error": ""
+    },
+    {
+        "job_id": "8bb947ac-98a8-44e6-a0ba-92a06b05a564",
+        "created_at": "2023-04-19T10:27:33.527079",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "c75f58685390b6f973fc186a50f70314",
+            "class": "MaxCut",
+            "instance": "G32",
+            "parameters": {},
+            "best_known": -1410,
+            "num_vars": {
+                "input": 2000,
+                "logical": 2000,
+                "physical": 2000
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 1003.143523,
+            "solutions": [
+                {
+                    "target_energy": -1376.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": -1376.0,
+                    "constraints": {
+                        "satisfied": 0,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Maximum Cuts",
+                        "value": 1376.0
+                    },
+                    "sampling_time": 113.927856
+                },
+                {
+                    "target_energy": -1388.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": -1388.0,
+                    "constraints": {
+                        "satisfied": 0,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Maximum Cuts",
+                        "value": 1388.0
+                    },
+                    "sampling_time": 226.814245
+                },
+                {
+                    "target_energy": -1396.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": -1396.0,
+                    "constraints": {
+                        "satisfied": 0,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Maximum Cuts",
+                        "value": 1396.0
+                    },
+                    "sampling_time": 346.517317
+                },
+                {
+                    "target_energy": -1398.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": -1398.0,
+                    "constraints": {
+                        "satisfied": 0,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Maximum Cuts",
+                        "value": 1398.0
+                    },
+                    "sampling_time": 629.208664
+                },
+                {
+                    "target_energy": -1402.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": -1402.0,
+                    "constraints": {
+                        "satisfied": 0,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Maximum Cuts",
+                        "value": 1402.0
+                    },
+                    "sampling_time": 803.5750039999999
+                },
+                {
+                    "target_energy": -1404.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": -1404.0,
+                    "constraints": {
+                        "satisfied": 0,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Maximum Cuts",
+                        "value": 1404.0
+                    },
+                    "sampling_time": 1002.967211
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 7,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "25263913ceab4dd1344672fae349767f",
+        "label": "test run",
+        "error": ""
+    },
+    {
+        "job_id": "85825d6b-ffd8-42e2-8f35-db2d9ca21cbe",
+        "created_at": "2023-04-19T10:27:34.490570",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "88954ba063e44b3ed6df7f1eadc1b4cb",
+            "class": "Sudoku",
+            "instance": "16x16_easy_233",
+            "parameters": {
+                "num_hints": 111
+            },
+            "best_known": 0,
+            "num_vars": {
+                "input": 599,
+                "logical": 599,
+                "physical": 599
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 899.4145149999999,
+            "solutions": [
+                {
+                    "target_energy": 0.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 0.0,
+                    "constraints": {
+                        "satisfied": 1024,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "Number of contradictions",
+                        "value": 0,
+                        "answer": "c84916b5ag2ed73f6273efa84dc915bggb1ad92c73f56e48e5df47g316b8ca297ebgfc4ad5318962a9cd7g82bfe63415436895e12cagbfd72f516b3d8497acge17865a9efbd3g2c43dg428f7ea6c9b519afe34cbg152768d5c2bgd169784f3eab137ae6g584f2d9cd69c8154327aegfb84e2b37fc9gd51a6fga5c2d96e1b4873"
+                    },
+                    "sampling_time": 64.866982
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 10,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "9b1dd1c8a22413bd29b17ea81569a4af",
+        "label": "test run",
+        "error": ""
+    },
+    {
+        "job_id": "d7804bd9-6449-4912-aad5-f0f3cc2a67d3",
+        "created_at": "2023-04-19T10:27:34.592484",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "2b00a6a40df1c036f0b1e55b9ef0a278",
+            "class": "Cvrp",
+            "instance": "P-n16-k8",
+            "parameters": {
+                "constraint_weight": 1.0,
+                "method": "binary",
+                "scale": 2
+            },
+            "best_known": 450,
+            "num_vars": {
+                "input": 640,
+                "logical": 688,
+                "physical": 688
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 959.118219,
+            "solutions": [
+                {
+                    "target_energy": 513.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 528.3208163265297,
+                    "constraints": {
+                        "satisfied": 79,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 485,
+                        "path": " 0 2 0 4 15 0 1 12 0 14 9 0 8 0 11 3 10 0 6 0 5 7 13 0"
+                    },
+                    "sampling_time": 53.749982
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 16,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "a792e11df4bfb42608a1df7b1fbd6e5f",
+        "label": "test run",
+        "error": ""
+    },
+    {
+        "job_id": "fff3f0c5-c02a-4623-b0d6-31f36fc4215a",
+        "created_at": "2023-04-19T10:27:40.368733",
+        "amplify_version": "0.11.1",
+        "problem": {
+            "id": "1f97b0d97fe982b036ace350ec1107e7",
+            "class": "Cvrp",
+            "instance": "A-n32-k5",
+            "parameters": {
+                "constraint_weight": 1.0,
+                "method": "relaxation",
+                "scale": 2
+            },
+            "best_known": 784,
+            "num_vars": {
+                "input": 2400,
+                "logical": 2400,
+                "physical": 2400
+            }
+        },
+        "client": {
+            "id": "f5af5c88f4211ecb9869f12cc5ea8d3f",
+            "settings": {},
+            "parameters": {
+                "outputs.num_outputs": 0,
+                "penalty_calibration": false
+            },
+            "timeout_like": {
+                "name": "timeout",
+                "value": 1000
+            },
+            "version": "v0.7.0-V100",
+            "name": "FixstarsClient"
+        },
+        "result": {
+            "annealing_time": 983.462116,
+            "solutions": [
+                {
+                    "target_energy": 1068.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1941.2159999999983,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 1009,
+                        "path": " 0 12 26 1 7 30 0 15 10 29 25 5 20 0 27 22 9 3 2 23 16 0 14 6 11 28 8 4 18 24 0 13 17 19 31 21 0"
+                    },
+                    "sampling_time": 145.16024499999997
+                },
+                {
+                    "target_energy": 1006.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1892.4256000000048,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 984,
+                        "path": " 0 24 16 30 26 0 23 8 4 11 28 6 0 17 19 31 21 13 7 0 20 5 25 10 15 27 0 14 29 22 18 9 2 3 1 12 0"
+                    },
+                    "sampling_time": 228.246173
+                },
+                {
+                    "target_energy": 970.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1846.6975999999966,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 970,
+                        "path": " 0 24 22 11 9 29 27 0 7 13 19 17 31 21 14 0 6 23 28 18 8 4 2 3 26 0 1 16 12 30 0 20 25 10 15 5 0"
+                    },
+                    "sampling_time": 308.372665
+                },
+                {
+                    "target_energy": 888.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1770.1247999999914,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 888,
+                        "path": " 0 14 18 11 4 28 8 22 9 15 0 7 2 23 3 6 26 0 21 17 19 31 13 0 29 10 25 5 20 27 24 0 30 1 12 16 0"
+                    },
+                    "sampling_time": 383.498601
+                },
+                {
+                    "target_energy": 875.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1757.1247999999923,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 875,
+                        "path": " 0 15 22 9 11 4 28 8 18 14 0 26 7 2 23 3 6 0 21 17 19 31 13 0 29 10 25 5 20 27 24 0 30 1 12 16 0"
+                    },
+                    "sampling_time": 455.768932
+                },
+                {
+                    "target_energy": 854.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1728.239999999994,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 854,
+                        "path": " 0 27 22 9 11 4 28 8 18 14 0 26 7 2 23 3 6 24 0 21 17 19 31 13 0 29 15 10 25 5 20 0 30 1 12 16 0"
+                    },
+                    "sampling_time": 590.3526469999999
+                },
+                {
+                    "target_energy": 850.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1724.2399999999936,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 850,
+                        "path": " 0 27 22 9 11 4 28 8 18 14 0 26 7 2 3 23 6 24 0 21 17 19 31 13 0 29 15 10 25 5 20 0 30 1 12 16 0"
+                    },
+                    "sampling_time": 771.4759499999999
+                },
+                {
+                    "target_energy": 847.0,
+                    "frequency": 1,
+                    "is_feasible": true,
+                    "qubo_energy": 1725.8479999999947,
+                    "constraints": {
+                        "satisfied": 121,
+                        "broken": 0
+                    },
+                    "objective_value": {
+                        "label": "total distances",
+                        "value": 847,
+                        "path": " 0 27 22 9 11 4 28 8 18 0 24 14 2 23 3 6 0 21 17 19 31 13 7 26 0 29 15 10 25 5 20 0 30 1 12 16 0"
+                    },
+                    "sampling_time": 829.4019049999999
+                }
+            ],
+            "execution_parameters": {
+                "num_gpus": 1,
+                "num_iterations": 14,
+                "penalty_calibration": false,
+                "timeout": 1000.0,
+                "version": "v0.7.0-V100"
+            }
+        },
+        "group_id": "67680845b2273e93709dbce82c9e7728",
+        "label": "test run",
+        "error": ""
+    }
+]

@@ -1,9 +1,7 @@
-import argparse
 import datetime
 import json
 import os
 import shutil
-import sys
 import warnings
 from itertools import product
 from pathlib import Path
@@ -12,7 +10,6 @@ from typing import List, Optional, Tuple
 from urllib.parse import urlparse
 
 import boto3
-from boto3.session import Session
 from jsonschema import validate
 
 from ..client_config.base import ClientConfig, get_client_config
@@ -22,85 +19,13 @@ from ..runner import ParallelRunner, Runner
 from ..timer import timer
 
 
-def parse_args(args):
-    start_datetime: str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    parser = argparse.ArgumentParser(description="QUBO Benchmark")
-    parser.add_argument(
-        "input_json",
-        type=str,
-        help="Specify the path to the json file describing the benchmark settings.",
-    )
-    parser.add_argument(
-        "-l",
-        "--label",
-        type=str,
-        default=start_datetime,
-        help="Specify the label for the benchmark.",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        type=str,
-        help=(
-            "Specify the directory where benchmark results are to be saved. "
-            "You can also use the S3 protocol URL to save to an S3 bucket."
-        ),
-    )
-    parser.add_argument(
-        "--aws-profile",
-        type=str,
-        default=None,
-        help=(
-            "Specify the aws profile. This option is referenced "
-            "when using the S3 protocol with the `--output` option."
-        ),
-    )
-    parser.add_argument(
-        "-p",
-        "--parallel",
-        type=int,
-        default=1,
-        help="Specifies the number of parallel executions.",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help=(
-            "It even builds the QUBO model based on the input json configuration. " "It does not run on the machine."
-        ),
-    )
-    args = parser.parse_args(args)
-    return args
-
-
-def cli_benchmark_impl(label: str, input_json: Path, output: Path, n_parallel: int, dry_run: bool):
-    start_datetime: str = datetime.datetime.now().astimezone().strftime("%Y%m%d_%H%M%S")
-
-    job_template_list = _parse_input_json(input_json)
-
-    # dry run の場合は QUBO model を作って終了
-    if dry_run:
-        [problem.make_model() for problem, _, _ in job_template_list]
-        return
-    results = _run_benchmark(job_template_list, n_parallel, label)
-
-    _save_result_json(results, input_json, output, start_datetime)
-
-
-def cli_benchmark():
-    args = parse_args(sys.argv[1:])
-
-    label: str = args.label
-    input_json: str = args.input_json
-    output: str = args.output if args.output is not None else str(Path(input_json).parent)
-    n_parallel: int = args.parallel
-    dry_run: bool = args.dry_run
-    aws_profile: Optional[str] = args.aws_profile
+def cli_benchmark(input_json: str, label: str, output: str, parallel: int, aws_profile: str, dry_run: bool):
+    if output is None:
+        output = str(Path(input_json).parent)
 
     # json 出力用の一時ディレクトリを作成
     with TemporaryDirectory() as temp_d:
-        cli_benchmark_impl(label, Path(input_json), Path(temp_d), n_parallel, dry_run)
+        cli_benchmark_impl(Path(input_json), label, Path(temp_d), parallel, dry_run)
 
         # output pathのプロトコルを確認
         if urlparse(output).scheme == "":
@@ -120,27 +45,23 @@ def cli_benchmark():
                 _save_result_local(temp_d, alt_output)
 
 
-def _save_result_local(temp_d: str, output: str):
-    output_path_obj = Path(output)
-    if len(os.listdir(temp_d)) > 0:
-        # 出力先ディレクトリを作成
-        output_path_obj.mkdir(mode=0o755, parents=True, exist_ok=True)
-        shutil.copytree(temp_d, output_path_obj, dirs_exist_ok=True)
+def cli_benchmark_impl(input_json: Path, label: str, output: Path, n_parallel: int, dry_run: bool):
+    start_datetime: str = datetime.datetime.now().astimezone().strftime("%Y%m%d_%H%M%S")
+    print(f"cli_benchmark_impl() {start_datetime}")
 
+    job_template_list = _parse_input_json(input_json)
 
-def _push_s3(dname: str, s3_url: str, session: Session):
-    print(f"Push results to {s3_url}")
-    s3 = session.resource("s3")
+    # dry run の場合は QUBO model を作って終了
+    if dry_run:
+        [problem.make_model() for problem, _, _ in job_template_list]
+        return
+    results = _run_benchmark(job_template_list, n_parallel, label)
 
-    parsed_s3_url = urlparse(s3_url)
-    s3bucket = s3.Bucket(parsed_s3_url.netloc)
-    for file in list(Path(dname).iterdir()):
-        key = str(Path(parsed_s3_url.path) / file.name).lstrip("/")
-        s3bucket.upload_file(str(file), key)
+    _save_result_json(results, input_json, output, start_datetime)
 
 
 @timer
-def validation(input_json: dict):
+def _validation(input_json: dict):
     with open(Path(__file__).parent / "schemas" / "benchmark.json") as f:
         json_schema = json.load(f)
     validate(instance=input_json, schema=json_schema)
@@ -149,7 +70,7 @@ def validation(input_json: dict):
 @timer
 def _parse_input_json(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
     j = json.load(filepath.open())
-    validation(j)
+    _validation(j)
 
     client_json = j["client"]
     client_name: str = client_json["name"]
@@ -253,6 +174,25 @@ def _save_result_json(
     return 0 if len(job_failed) == 0 else 1
 
 
+def _save_result_local(temp_d: str, output: str):
+    output_path_obj = Path(output)
+    if len(os.listdir(temp_d)) > 0:
+        # 出力先ディレクトリを作成
+        output_path_obj.mkdir(mode=0o755, parents=True, exist_ok=True)
+        shutil.copytree(temp_d, output_path_obj, dirs_exist_ok=True)
+
+
+def _push_s3(dname: str, s3_url: str, session: boto3.Session):
+    print(f"Push results to {s3_url}")
+    s3 = session.resource("s3")
+
+    parsed_s3_url = urlparse(s3_url)
+    s3bucket = s3.Bucket(parsed_s3_url.netloc)
+    for file in list(Path(dname).iterdir()):
+        key = str(Path(parsed_s3_url.path) / file.name).lstrip("/")
+        s3bucket.upload_file(str(file), key)
+
+
 def _get_session(aws_profile: Optional[str] = None) -> Optional[dict]:
     dotenv_path = Path().cwd() / ".env"
 
@@ -262,7 +202,7 @@ def _get_session(aws_profile: Optional[str] = None) -> Optional[dict]:
         load_dotenv(dotenv_path)
 
     if aws_profile is not None:
-        session = Session(profile_name=aws_profile)
+        session = boto3.Session(profile_name=aws_profile)
     else:
         # 1. credentials from ENV
         AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -281,7 +221,7 @@ def _get_session(aws_profile: Optional[str] = None) -> Optional[dict]:
             RoleSessionName=f"{ROLE_NAME}In{TARGET_ACCOUNT}",
         )
 
-        session = Session(
+        session = boto3.Session(
             aws_access_key_id=response["Credentials"]["AccessKeyId"],
             aws_secret_access_key=response["Credentials"]["SecretAccessKey"],
             aws_session_token=response["Credentials"]["SessionToken"],

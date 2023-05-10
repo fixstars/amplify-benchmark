@@ -8,15 +8,11 @@ flake8 = "*"
 black = "*"
 mypy = "*"
 pytest = "*"
-kaleido = "*"
-ipykernel = "*"
 isort = "*"
 pytest-cov = "*"
-colorama = "*"
 
 [packages]
-annealing-benchmark = {editable=true, path=".", index="local"}
-python-dotenv = "*"
+amplify-benchmark = {editable=true, path="."}
 
 [pipenv]
 allow_prereleases = true

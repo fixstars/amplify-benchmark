@@ -1,9 +1,6 @@
-import argparse
 import datetime
 import json
 import os
-import shutil
-import sys
 import warnings
 from pathlib import Path
 from typing import List, Optional
@@ -16,6 +13,23 @@ from jsonschema import validate
 from tqdm import tqdm
 
 from ..timer import timer
+
+
+def cli_make_report(input_jsons: str | list[str], output: str, aws_profile: str):
+    cli_make_report_impl(input_jsons, output, aws_profile)
+
+
+@timer
+def validation(data: List[dict], label: str = "") -> List[dict]:
+    with open(Path(__file__).parent / "schemas" / "result.json") as f:
+        json_schema = json.load(f)
+
+    try:
+        validate(instance=data, schema=json_schema)
+        return data
+    except Exception:
+        warnings.warn(f"Skipped loading because failed to validate: {label}")
+        return []
 
 
 def delete_y(d):
@@ -42,34 +56,7 @@ class MyEncoder(json.JSONEncoder):
             return super(MyEncoder, self).default(obj)
 
 
-def cli_make_report():
-    parser = argparse.ArgumentParser(description="QUBO Benchmark Report")
-    parser.add_argument("input_jsons", type=str, help="path to a input json file", nargs="*")
-    parser.add_argument("-o", "--output", type=str, help="path to an output directory")
-    parser.add_argument(
-        "--aws-profile",
-        type=str,
-        default=None,
-        help="Specify the aws profile. This option is referenced when using the S3 protocol with the input_jsons.",
-    )
-    args = parser.parse_args(sys.argv[1:])
-    cli_make_report_impl(args.input_jsons, args.output, args.aws_profile)
-
-
-@timer
-def validation(data: List[dict], label: str = "") -> List[dict]:
-    with open(Path(__file__).parent / "schemas" / "result.json") as f:
-        json_schema = json.load(f)
-
-    try:
-        validate(instance=data, schema=json_schema)
-        return data
-    except Exception:
-        warnings.warn(f"Skipped loading because failed to validate: {label}")
-        return []
-
-
-def cli_make_report_impl(input_jsons, output, aws_profile):
+def cli_make_report_impl(input_jsons: str | list[str], output: str, aws_profile: str):
     input_data = []
     for input_json_path in tqdm(input_jsons):
         data_li = []
@@ -87,8 +74,8 @@ def cli_make_report_impl(input_jsons, output, aws_profile):
     ).resolve()
 
     report_json = format_result_json_to_report_json(input_data)
-    template_path = Path(os.path.dirname(os.path.abspath(__file__)) + "/template/dist/")
-    shutil.copytree(template_path, output, dirs_exist_ok=True)
+    # template_path = Path(os.path.dirname(os.path.abspath(__file__)) + "/template/dist/")
+    # shutil.copytree(template_path, output, dirs_exist_ok=True)
     os.makedirs(output / "data", exist_ok=True)
     with open(output / "data" / "data.json", "w") as f:
         json.dump(report_json, f, cls=MyEncoder)
