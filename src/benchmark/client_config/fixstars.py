@@ -19,6 +19,8 @@ class FixstarsClientConfig(ClientConfig):
             for key in dir(client_result.execution_parameters)
             if key[0] != "_"
         }
+        if "penalty_multipliers" in execution_parameters:
+            del execution_parameters["penalty_multipliers"]
         return execution_parameters
 
     def get_sampling_time(self, client_result: FixstarsClientResult, solutions: list[SolverSolution]) -> list:
