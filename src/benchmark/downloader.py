@@ -63,7 +63,7 @@ def download_qap_file(instance: str, dest: str) -> None:
 
 def download_maxcut_file(instance: str, dest: str) -> None:
     GSET_URL = "https://web.stanford.edu/~yyye/yyye/Gset/"
-    K2000_URL = "https://github.com/hariby/SA-complete-graph/blob/master/WK2000_1.rud"
+    K2000_URL = "https://raw.githubusercontent.com/hariby/SA-complete-graph/master/WK2000_1.rud"
 
     if instance.startswith("G"):
         ins_url = urljoin(GSET_URL, instance)
