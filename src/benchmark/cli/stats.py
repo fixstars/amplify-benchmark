@@ -15,8 +15,8 @@ from tqdm import tqdm
 from ..timer import timer
 
 
-def cli_make_report(input_jsons: str | list[str], output: str, aws_profile: str):
-    cli_make_report_impl(input_jsons, output, aws_profile)
+def cli_stats(input_jsons: str | list[str], output: str, aws_profile: str):
+    cli_stats_impl(input_jsons, output, aws_profile)
 
 
 @timer
@@ -56,7 +56,7 @@ class MyEncoder(json.JSONEncoder):
             return super(MyEncoder, self).default(obj)
 
 
-def cli_make_report_impl(input_jsons: str | list[str], output: str, aws_profile: str):
+def cli_stats_impl(input_jsons: str | list[str], output: str, aws_profile: str):
     input_data = []
     for input_json_path in tqdm(input_jsons):
         data_li = []
@@ -73,12 +73,11 @@ def cli_make_report_impl(input_jsons: str | list[str], output: str, aws_profile:
         else Path().cwd() / "report" / datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     ).resolve()
 
-    report_json = format_result_json_to_report_json(input_data)
-    # template_path = Path(os.path.dirname(os.path.abspath(__file__)) + "/template/dist/")
-    # shutil.copytree(template_path, output, dirs_exist_ok=True)
+    stats_json = format_result_json_to_stats_json(input_data)
+
     os.makedirs(output / "data", exist_ok=True)
     with open(output / "data" / "data.json", "w") as f:
-        json.dump(report_json, f, cls=MyEncoder)
+        json.dump(stats_json, f, cls=MyEncoder)
 
 
 def _load_jsons(json_path_str: str) -> list:
@@ -197,7 +196,7 @@ def _get_session(aws_profile: Optional[str] = None) -> boto3.Session:
     return session
 
 
-def format_result_json_to_report_json(result_json):
+def format_result_json_to_stats_json(result_json):
     def problem_add_group_id(df):
         df_tmp = df["problem"].apply(pd.Series)
         df_tmp["benchmarks"] = df["group_id"]
@@ -497,10 +496,10 @@ def format_result_json_to_report_json(result_json):
     benchmarks = json.loads(df_benchmarks[df_benchmarks["history"].isna()].dropna(axis=1).to_json(orient="index"))
     benchmarks.update(json.loads(df_benchmarks[~df_benchmarks["history"].isna()].to_json(orient="index")))
 
-    report_data = {
+    stats_data = {
         "benchmarks": benchmarks,
         "problems": problems,
         "clients": clients,
     }
 
-    return report_data
+    return stats_data

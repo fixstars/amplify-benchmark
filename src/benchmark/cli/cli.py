@@ -3,7 +3,7 @@ import datetime
 import click
 
 from .benchmark import cli_benchmark
-from .report import cli_make_report
+from .stats import cli_stats
 
 start_datetime: str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -70,10 +70,10 @@ def benchmark(input_json: str, label: str, output: str, parallel: int, aws_profi
     type=str,
     help="Specify the aws profile. This option is referenced when using the S3 protocol with the input_jsons.",
 )
-def report(input_jsons: str | list[str], output: str, aws_profile: str):
-    """QUBO Benchmark Report"""
+def stats(input_jsons: str | list[str], output: str, aws_profile: str):
+    """Generate QUBO benchmark stats data."""
     print(f"input_json: {input_jsons}")
     print(f"output: {output}")
     print(f"aws_profile: {aws_profile}")
 
-    cli_make_report(input_jsons, output, aws_profile)
+    cli_stats(input_jsons, output, aws_profile)
