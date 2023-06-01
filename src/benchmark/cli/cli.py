@@ -64,7 +64,14 @@ def benchmark(input_json: str, label: str, output: str, parallel: int, aws_profi
 
 @cli.command()
 @click.argument("input_jsons", nargs=-1)
-@click.option("--output", "-o", type=str, help="path to an output directory")
+@click.option(
+    "--output",
+    "-o",
+    type=str,
+    help="Specify the directory/file where stats file saved."
+    "If this option is not specified, the output will be `stats.json` directly"
+    "under the directory where it was executed.",
+)
 @click.option(
     "--aws-profile",
     type=str,

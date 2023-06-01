@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 import warnings
@@ -15,7 +14,7 @@ from tqdm import tqdm
 from ..timer import timer
 
 
-def cli_stats(input_jsons: str | list[str], output: str, aws_profile: str):
+def cli_stats(input_jsons: str | list[str], output: Optional[str], aws_profile: str):
     cli_stats_impl(input_jsons, output, aws_profile)
 
 
@@ -56,7 +55,7 @@ class MyEncoder(json.JSONEncoder):
             return super(MyEncoder, self).default(obj)
 
 
-def cli_stats_impl(input_jsons: str | list[str], output: str, aws_profile: str):
+def cli_stats_impl(input_jsons: str | list[str], output: Optional[str], aws_profile: str):
     input_data = []
     for input_json_path in tqdm(input_jsons):
         data_li = []
@@ -66,17 +65,30 @@ def cli_stats_impl(input_jsons: str | list[str], output: str, aws_profile: str):
             data_li = _load_jsons_from_s3(input_json_path, aws_profile)
         input_data.extend(data_li)
 
-    # outputのデフォルト値: current/report
-    output = (
-        Path(output)
-        if output is not None
-        else Path().cwd() / "report" / datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    ).resolve()
-
     stats_json = format_result_json_to_stats_json(input_data)
 
-    os.makedirs(output / "data", exist_ok=True)
-    with open(output / "data" / "data.json", "w") as f:
+    # 1. デフォルト: cwd() / "stats.json"
+    # 2. ディレクトリ名: output / "stats.json"
+    # 3. ファイル名: output
+    output_path = Path()
+    if output is None:
+        output_path = Path().cwd() / "stats.json"
+    else:
+        output_path = Path(output)
+
+        if output_path.suffix == "":
+            os.makedirs(output_path, exist_ok=True)
+            output_path /= "stats.json"
+        elif output_path.suffix == ".json":
+            os.makedirs(output_path.parent, exist_ok=True)
+            pass
+        else:
+            raise RuntimeError(
+                f"{output} is not supported."
+                "The `output` argument must be a directory name or a filename with a json suffix."
+            )
+
+    with open(output_path, "w") as f:
         json.dump(stats_json, f, cls=MyEncoder)
 
 
