@@ -10,7 +10,7 @@ from amplify import Solver
 from .client_config.base import ClientConfig
 from .job import Job
 from .problem.base import Problem
-from .result import BenchmarkResult, JobFailedError, JobResult, NumTraialError
+from .result import BenchmarkResult, JobFailedError, JobResult, NumTrialError
 
 
 class Runner:
@@ -123,4 +123,4 @@ def _run_job_impl(job: Job) -> JobResult:
         solver.logical_result,
         job_error=JobFailedError(job.job_id, "Failed to send job to the solver\n" + traceback.format_exc()),
     )
-    raise NumTraialError(NUM_TRIALS, job_result)
+    raise NumTrialError(NUM_TRIALS, job_result)

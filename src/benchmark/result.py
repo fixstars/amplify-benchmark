@@ -67,13 +67,13 @@ def _make_result(job, solutions, client_result) -> dict:
     return result
 
 
-class NumTraialError(Exception):
+class NumTrialError(Exception):
     def __init__(self, num_trial, job_result):
         self.num_trial = num_trial
         self.job_result = job_result
 
     def __str__(self):
-        return f"NumTraialError (num_trial: {self.num_trial})"
+        return f"NumTrialError (num_trial: {self.num_trial})"
 
 
 class JobFailedError(Exception):
