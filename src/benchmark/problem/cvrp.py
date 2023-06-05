@@ -94,8 +94,10 @@ class Cvrp(Problem):
         return {"label": "total distances", "value": value, "path": path}
 
     @staticmethod
-    def __load(instance: str, path: Optional[str] = None) -> Tuple[int, int, np.ndarray, list, dict, int, int, int]:
-        best_known: Optional[float] = None
+    def __load(
+        instance: str, path: Optional[str] = None
+    ) -> Tuple[int, int, np.ndarray, list, dict, int, Optional[int], Optional[int]]:
+        best_known: Optional[int] = None
         nvehicle: Optional[int] = None
 
         if path is not None:
@@ -105,7 +107,7 @@ class Cvrp(Problem):
 
         capacity, dimension, distances, demand, coord, depot = load_cvrp_file(instance_file)
 
-        if path is not None:
+        if path is not None:  # TODO: solution fileのパス指定に対応する
             pass
         else:
             instance_opt_file = get_sol_file(instance)

@@ -1,5 +1,47 @@
 stages:
+  - scan
   - push
+
+python-src-format:
+  stage: scan
+  tags:
+    - docker
+  image: python:3.10
+  script:
+    - pip install pipenv
+    - pipenv install --dev --skip-lock
+    - pipenv run black --check src/ && pipenv run isort --check src/
+    - pipenv run black --check test/ && pipenv run isort --check test/
+  only:
+    refs:
+      - merge_requests
+
+python-src-lint:
+  stage: scan
+  tags:
+    - docker
+  image: python:3.10
+  script:
+    - pip install pipenv
+    - pipenv install --dev --skip-lock
+    - pipenv run flake8 src/ && pipenv run mypy src/
+    - pipenv run flake8 test/ && pipenv run mypy test/
+  only:
+    refs:
+      - merge_requests
+
+python-test:
+  stage: scan
+  tags:
+    - docker
+  image: python:3.10
+  script:
+    - pip install pipenv
+    - pipenv install --dev --skip-lock
+    - pipenv run pytest --cov=src test/
+  only:
+    refs:
+      - merge_requests
 
 sync-repositories:
   stage: push

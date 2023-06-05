@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import importlib
 from dataclasses import asdict, dataclass, field
 from typing import Union

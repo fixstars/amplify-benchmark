@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+from typing import Union
 
 import click
 
@@ -77,7 +80,7 @@ def benchmark(input_json: str, label: str, output: str, parallel: int, aws_profi
     type=str,
     help="Specify the aws profile. This option is referenced when using the S3 protocol with the input_jsons.",
 )
-def stats(input_jsons: str | list[str], output: str, aws_profile: str):
+def stats(input_jsons: Union[str, list[str]], output: str, aws_profile: str):
     """Generate QUBO benchmark stats data."""
     print(f"input_json: {input_jsons}")
     print(f"output: {output}")

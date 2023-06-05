@@ -34,7 +34,7 @@ def download_tsp_file(instance: str, dest: str) -> None:
     gz_file = instance_file.parent / (instance + ".tsp.gz")
     download_file(
         url=urljoin(TSPLIB_URL, gz_file.name),
-        dest=gz_file,
+        dest=str(gz_file),
     )
 
     # Extract the contents from the .gz file and save it to the specified path

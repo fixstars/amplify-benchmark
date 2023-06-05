@@ -129,8 +129,7 @@ def load_qap_file(problem_file: str) -> Tuple[int, np.ndarray, np.ndarray]:
 
 def load_qap_opt(sol_file: str) -> Optional[int]:
     best_known: Optional[int] = None
-    sol_file = Path(sol_file)
-    if sol_file.exists():
+    if Path(sol_file).exists():
         with open(sol_file) as f:
             lines = f.read().splitlines()
             first = re.split(" +", re.sub("^ +", "", lines[0]))

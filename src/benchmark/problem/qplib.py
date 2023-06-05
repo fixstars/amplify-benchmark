@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -69,7 +71,7 @@ class Qplib(Problem):
         return str(instance_file), best_known
 
 
-def load_best_known(instance: str) -> Optional[int]:
+def load_best_known(instance: str) -> Optional[float]:
     cur_dir = Path(__file__).parent
     qplib_dir = cur_dir / "data" / "QPLIB"
 

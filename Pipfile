@@ -10,6 +10,8 @@ mypy = "*"
 pytest = "*"
 isort = "*"
 pytest-cov = "*"
+colorama = "*"
+types-requests = "*"
 
 [packages]
 amplify-benchmark = {editable=true, path="."}

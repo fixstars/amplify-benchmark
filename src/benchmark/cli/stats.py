@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import json
 import os
 import warnings
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, Union
 from urllib.parse import urlparse
 
 import boto3
@@ -14,12 +16,12 @@ from tqdm import tqdm
 from ..timer import timer
 
 
-def cli_stats(input_jsons: str | list[str], output: Optional[str], aws_profile: str):
+def cli_stats(input_jsons: Union[str, list[str]], output: Optional[str], aws_profile: str):
     cli_stats_impl(input_jsons, output, aws_profile)
 
 
 @timer
-def validation(data: List[dict], label: str = "") -> List[dict]:
+def validation(data: list[dict], label: str = "") -> list[dict]:
     with open(Path(__file__).parent / "schemas" / "result.json") as f:
         json_schema = json.load(f)
 
@@ -55,7 +57,7 @@ class MyEncoder(json.JSONEncoder):
             return super(MyEncoder, self).default(obj)
 
 
-def cli_stats_impl(input_jsons: str | list[str], output: Optional[str], aws_profile: str):
+def cli_stats_impl(input_jsons: Union[str, list[str]], output: Optional[str], aws_profile: str):
     input_data = []
     for input_json_path in tqdm(input_jsons):
         data_li = []
