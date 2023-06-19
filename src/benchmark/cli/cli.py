@@ -6,6 +6,7 @@ from typing import Union
 import click
 
 from .benchmark import cli_benchmark
+from .download_all import cli_download_all, cli_download_clean
 from .stats import cli_stats
 
 start_datetime: str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -85,5 +86,23 @@ def stats(input_jsons: Union[str, list[str]], output: str, aws_profile: str):
     print(f"input_json: {input_jsons}")
     print(f"output: {output}")
     print(f"aws_profile: {aws_profile}")
-
     cli_stats(input_jsons, output, aws_profile)
+
+
+@cli.command()
+@click.argument("problem_class")
+@click.option("--clean", is_flag=True)
+def download(problem_class: str, clean: bool):
+    """
+    Download all supported instance files in the specified problem class name.
+    The problem class name must be one of the following:
+
+        cvrp, maxcut, qap, qplib, tsp
+    """
+    print(f"problem_class: {problem_class}")
+    print(f"option: {clean}")
+
+    if clean is True:
+        cli_download_clean(problem_class)
+    else:
+        cli_download_all(problem_class)

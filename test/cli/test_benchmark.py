@@ -23,7 +23,7 @@ def test_benchmark_dry_run(runner):
     assert result.exit_code == 0
 
 
-@pytest.mark.skip
+@pytest.mark.slow
 def test_benchmark(runner):
     input_json_filename = "benchmark.json"
     input_json_path = Path(__file__).parent / ".." / "data" / input_json_filename
