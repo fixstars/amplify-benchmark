@@ -84,3 +84,28 @@ sync-repositories:
     - git push github develop:main
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+
+check-license:
+  stage: scan
+  tags:
+    - docker
+  image: bitnami/git
+  script:
+    - bash license.sh
+    - >
+      if [[ $(git diff --name-only HEAD | grep -e src/ || echo '') != "" ]]; then
+        RED="\e[31m"
+        END_COLOR="\e[0m"
+
+        echo ""
+        echo -e "${RED}######################################################################${END_COLOR}"
+        echo -e "${RED}# Some of the files in the src folder do not have the LICENSE block. #${END_COLOR}"
+        echo -e "${RED}# Please sh license.sh before committing.                            #${END_COLOR}"
+        echo -e "${RED}######################################################################${END_COLOR}"
+        echo ""
+
+        exit 1
+      fi
+  only:
+    refs:
+      - merge_requests
