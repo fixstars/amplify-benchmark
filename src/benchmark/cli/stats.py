@@ -241,11 +241,16 @@ def format_result_json_to_stats_json(result_json):
         df_tmp = df.explode("solutions").copy()
         df_tmp = pd.concat([df_tmp, df_tmp["solutions"].apply(pd.Series)], axis=1)
         df_tmp = df_tmp.reset_index(drop=True)
+        df_tmp["broken"] = df_tmp["constraints"].apply(pd.Series)["broken"]
         return df_tmp
 
-    def filter_min_qubo_energy(df):
+    def filter_best_solutions(df):
         return df.loc[
-            df.groupby("job_id")["qubo_energy"].transform("idxmin").fillna(pd.Series(df.index)).drop_duplicates()
+            df.groupby("job_id").apply(
+                lambda x: x[x["is_feasible"]]["target_energy"].idxmin()
+                if (x["is_feasible"]).any()
+                else x["broken"].idxmin()
+            )
         ]
 
     def agg_solutions(df):
@@ -257,6 +262,7 @@ def format_result_json_to_stats_json(result_json):
                     "job_id": "count",
                     "target_energy": list,
                     "is_feasible": list,
+                    "broken": list,
                     "sampling_time": list,
                     "best_known": "first",
                 }
@@ -274,6 +280,7 @@ def format_result_json_to_stats_json(result_json):
                     "target_energy": sum,
                     "is_feasible": sum,
                     "sampling_time": sum,
+                    "broken": sum,
                     "best_known": "first",
                     "label": lambda x: "",
                 }
@@ -310,7 +317,11 @@ def format_result_json_to_stats_json(result_json):
     def calc_raw_data(df):
         df["raw_data"] = df.apply(
             lambda x: [
-                {"sampling_time": x["sampling_time"][i], "target_energy": x["target_energy"][i]}
+                {
+                    "sampling_time": x["sampling_time"][i],
+                    "target_energy": x["target_energy"][i],
+                    "broken": x["broken"][i],
+                }
                 for i in range(x["num_samples"])
                 if x["target_energy"][i] == x["target_energy"][i]
             ],
@@ -388,6 +399,8 @@ def format_result_json_to_stats_json(result_json):
         return df_tmp
 
     def get_logspace(start, end, num_steps):
+        if start == end:
+            return np.array([start])
         stop = num_steps * (np.log10(end) / np.log10(end / start))
         base = pow(10, np.log10(end) / stop)
         ret = np.logspace(stop - num_steps, stop, num_steps, base=base)
@@ -418,9 +431,24 @@ def format_result_json_to_stats_json(result_json):
         return df_tmp
 
     def calc_target_energy_describe(df):
-        df_tmp = pd.concat([df, df["target_energy"].apply(lambda x: pd.Series(x).describe())], axis=1)
-        df_tmp["target_energy_describe"] = df_tmp.apply(
-            lambda x: {"min": x["min"], "25%": x["25%"], "50%": x["50%"], "75%": x["75%"], "max": x["max"]}, axis=1
+        df_tmp = df.copy()
+        df_tmp["target_energy_describe"] = (
+            df["target_energy"]
+            .apply(lambda x: pd.Series(x).describe())
+            .apply(
+                lambda x: {"min": x["min"], "25%": x["25%"], "50%": x["50%"], "75%": x["75%"], "max": x["max"]}, axis=1
+            )
+        )
+        return df_tmp
+
+    def calc_broken_describe(df):
+        df_tmp = df.copy()
+        df_tmp["broken_describe"] = (
+            df_tmp["broken"]
+            .apply(lambda x: pd.Series(x).describe())
+            .apply(
+                lambda x: {"min": x["min"], "25%": x["25%"], "50%": x["50%"], "75%": x["75%"], "max": x["max"]}, axis=1
+            )
         )
         return df_tmp
 
@@ -436,6 +464,7 @@ def format_result_json_to_stats_json(result_json):
                         "reach_best_rate": x["reach_best_rate"].iloc[i],
                         "time_to_solution": x["time_to_solution"].iloc[i],
                         "target_energy": x["target_energy_describe"].iloc[i],
+                        "broken": x["broken_describe"].iloc[i],
                     }
                     for i in range(len(x))
                 ]
@@ -454,7 +483,7 @@ def format_result_json_to_stats_json(result_json):
         df_tmp["results"] = (
             df.pipe(pre_process)
             .pipe(expand_solutions)
-            .pipe(filter_min_qubo_energy)
+            .pipe(filter_best_solutions)
             .pipe(agg_solutions)
             .pipe(sum_label)
             .pipe(calc_mean_sampling_time)
@@ -476,6 +505,7 @@ def format_result_json_to_stats_json(result_json):
                 .pipe(calc_reach_best_rate)
                 .pipe(calc_time_to_solution)
                 .pipe(calc_target_energy_describe)
+                .pipe(calc_broken_describe)
                 .pipe(make_history)
             )
         else:
@@ -492,7 +522,7 @@ def format_result_json_to_stats_json(result_json):
                 "instance": "first",
                 "parameters": "first",
                 "best_known": "first",
-                "benchmarks": lambda x: [{"group_id": i} for i in set(x)],
+                "benchmarks": lambda x: [{"group_id": i} for i in sorted(list(set(x)))],
             }
         )
         .to_json(orient="index")
@@ -506,7 +536,7 @@ def format_result_json_to_stats_json(result_json):
                 "parameters": "first",
                 "version": "first",
                 "name": "first",
-                "benchmarks": lambda x: [{"group_id": i} for i in set(x)],
+                "benchmarks": lambda x: [{"group_id": i} for i in sorted(list(set(x)))],
             }
         )
         .to_json(orient="index")

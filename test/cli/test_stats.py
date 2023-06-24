@@ -1,8 +1,10 @@
+import json
 import os
 import shutil
 from pathlib import Path
 
 from benchmark.cli.cli import cli
+from benchmark.cli.stats import format_result_json_to_stats_json
 
 
 def test_stats_output(runner):
@@ -35,3 +37,14 @@ def test_stats_output(runner):
     expected = Path().cwd() / "test_stats" / "hoge.json"
     assert expected.exists() is True
     shutil.rmtree(expected.parent)
+
+
+def test_format_result_json_to_stats_json():
+    input_json_path = Path(__file__).parent / ".." / "data" / "benchmark_20230419_102731.json"
+    with open(input_json_path, mode="rt", encoding="utf-8") as file:
+        data = json.load(file)
+    stats = format_result_json_to_stats_json(data)
+    output_json_path = Path(__file__).parent / ".." / "data" / "benchmark_20230419_102731_stats.json"
+    with open(output_json_path, mode="rt", encoding="utf-8") as file:
+        output = json.load(file)
+    assert stats == output

@@ -22,31 +22,15 @@ def _get_amplify_version() -> str:
         return ""
 
 
-def _calculate_qubo_energy(model: AmplifyModel, spins: Dict[int, int]) -> float:
-    # logical_mapping, logical_model_poly を使って qubo_energy を計算
-    logical_poly = model.logical_model_poly
-    input_to_logical_map = model.logical_mapping
-    logical_spins = [0] * len(spins)
-    for input_layer_index, value in spins.items():
-        if input_layer_index not in input_to_logical_map:
-            continue
-        logical_layer_index = input_to_logical_map[input_layer_index]
-        logical_spins[logical_layer_index] = value
-    qubo_energy = logical_poly.replace_all(logical_spins)
-    return qubo_energy
-
-
 def _make_basic_summary(model: AmplifyModel, solution: SolverSolution) -> dict:
     target_energy = solution.energy
     checks = model.check_constraints(solution.values)
     satisfied = len(list(filter(None, map(lambda x: x[1], checks))))
     num_constraints = len(checks)
-    qubo_energy = _calculate_qubo_energy(model, solution.values)
     return {
         "target_energy": target_energy,
         "frequency": solution.frequency,
         "is_feasible": solution.is_feasible,
-        "qubo_energy": qubo_energy,
         "constraints": {"satisfied": satisfied, "broken": num_constraints - satisfied},
     }
 
