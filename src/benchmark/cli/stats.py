@@ -532,7 +532,7 @@ def format_result_json_to_stats_json(result_json):
         .groupby("id")
         .agg(
             {
-                # "settings": "first",
+                "settings": "first",
                 "parameters": "first",
                 "version": "first",
                 "name": "first",

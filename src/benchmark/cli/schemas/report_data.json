@@ -2,7 +2,11 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": ["benchmarks", "problems", "clients"],
+  "required": [
+    "benchmarks",
+    "problems",
+    "clients"
+  ],
   "properties": {
     "benchmarks": {
       "type": "object",
@@ -12,7 +16,11 @@
           "description": "Group ID",
           "type": "object",
           "additionalProperties": false,
-          "required": ["problem_id", "client_id", "results"],
+          "required": [
+            "problem_id",
+            "client_id",
+            "results"
+          ],
           "properties": {
             "problem_id": {
               "description": "Problem ID",
@@ -64,14 +72,51 @@
                         "description": "Time To Solution",
                         "type": "object",
                         "additionalProperties": false,
-                        "required": ["0%", "1%", "5%", "10%", "20%", "50%"],
+                        "required": [
+                          "0%",
+                          "1%",
+                          "5%",
+                          "10%",
+                          "20%",
+                          "50%"
+                        ],
                         "properties": {
-                          "0%": { "type": ["number", "null"] },
-                          "1%": { "type": ["number", "null"] },
-                          "5%": { "type": ["number", "null"] },
-                          "10%": { "type": ["number", "null"] },
-                          "20%": { "type": ["number", "null"] },
-                          "50%": { "type": ["number", "null"] }
+                          "0%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "1%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "5%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "10%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "20%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "50%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          }
                         }
                       },
                       "raw_data": {
@@ -80,7 +125,10 @@
                         "items": {
                           "type": "object",
                           "additionalProperties": false,
-                          "required": ["sampling_time", "target_energy"],
+                          "required": [
+                            "sampling_time",
+                            "target_energy"
+                          ],
                           "properties": {
                             "sampling_time": {
                               "type": "number"
@@ -136,36 +184,94 @@
                         "description": "Time To Solution",
                         "type": "object",
                         "additionalProperties": false,
-                        "required": ["0%", "1%", "5%", "10%", "20%", "50%"],
+                        "required": [
+                          "0%",
+                          "1%",
+                          "5%",
+                          "10%",
+                          "20%",
+                          "50%"
+                        ],
                         "properties": {
-                          "0%": { "type": ["number", "null"] },
-                          "1%": { "type": ["number", "null"] },
-                          "5%": { "type": ["number", "null"] },
-                          "10%": { "type": ["number", "null"] },
-                          "20%": { "type": ["number", "null"] },
-                          "50%": { "type": ["number", "null"] }
+                          "0%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "1%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "5%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "10%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "20%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "50%": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          }
                         }
                       },
                       "target_energy": {
                         "description": "目的関数の値",
                         "type": "object",
                         "additionalProperties": false,
-                        "required": ["min", "25%", "50%", "75%", "max"],
+                        "required": [
+                          "min",
+                          "25%",
+                          "50%",
+                          "75%",
+                          "max"
+                        ],
                         "properties": {
                           "min": {
-                            "type": ["number", "null"]
+                            "type": [
+                              "number",
+                              "null"
+                            ]
                           },
                           "25%": {
-                            "type": ["number", "null"]
+                            "type": [
+                              "number",
+                              "null"
+                            ]
                           },
                           "50%": {
-                            "type": ["number", "null"]
+                            "type": [
+                              "number",
+                              "null"
+                            ]
                           },
                           "75%": {
-                            "type": ["number", "null"]
+                            "type": [
+                              "number",
+                              "null"
+                            ]
                           },
                           "max": {
-                            "type": ["number", "null"]
+                            "type": [
+                              "number",
+                              "null"
+                            ]
                           }
                         }
                       }
@@ -204,11 +310,35 @@
             },
             "best_known": {
               "description": "最適解のエネルギー値",
-              "type": ["number", "null"]
+              "type": [
+                "number",
+                "null"
+              ]
             },
             "parameters": {
               "description": "定式化パラメータ",
-              "type": "object"
+              "type": "object",
+              "patternProperties": {
+                ".": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null",
+                    "object"
+                  ],
+                  "patternProperties": {
+                    ".": {
+                      "type": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
             },
             "benchmarks": {
               "description": "このproblem idを取り扱っているgroup_idのリスト",
@@ -216,7 +346,9 @@
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["group_id"],
+                "required": [
+                  "group_id"
+                ],
                 "properties": {
                   "group_id": {
                     "description": "Group ID",
@@ -238,7 +370,13 @@
           "description": "Client ID",
           "type": "object",
           "additionalProperties": false,
-          "required": ["name", "version", "parameters", "benchmarks"],
+          "required": [
+            "name",
+            "version",
+            "settings",
+            "parameters",
+            "benchmarks"
+          ],
           "properties": {
             "name": {
               "description": "クライアント名",
@@ -250,7 +388,53 @@
             },
             "parameters": {
               "description": "クライアントパラメータ",
-              "type": "object"
+              "type": "object",
+              "patternProperties": {
+                ".": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null",
+                    "object"
+                  ],
+                  "patternProperties": {
+                    ".": {
+                      "type": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "settings": {
+              "description": "クライアント設定",
+              "type": "object",
+              "patternProperties": {
+                ".": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null",
+                    "object"
+                  ],
+                  "patternProperties": {
+                    ".": {
+                      "type": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "null"
+                      ]
+                    }
+                  }
+                }
+              }
             },
             "benchmarks": {
               "description": "このclient idを取り扱っているgroup_idのリスト",
@@ -258,7 +442,9 @@
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["group_id"],
+                "required": [
+                  "group_id"
+                ],
                 "properties": {
                   "group_id": {
                     "description": "Group ID",
