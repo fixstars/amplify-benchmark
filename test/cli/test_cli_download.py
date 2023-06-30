@@ -2,8 +2,8 @@ import re
 
 import pytest
 
-from benchmark.cli.cli import cli
-from benchmark.cli.download_all import cli_download_clean
+from amplify_bench.cli.cli import cli
+from amplify_bench.cli.download_all import cli_download_clean
 
 
 @pytest.mark.slow

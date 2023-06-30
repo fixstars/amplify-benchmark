@@ -2,10 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from benchmark.problem.base import gen_problem
-from benchmark.problem.qplib import Qplib, get_instance_file
-
-from ..common import SolverSolutionSimulator as SolverSolution
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.problem.qplib import Qplib, get_instance_file
 
 
 @pytest.mark.parametrize(
@@ -34,10 +32,10 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate(cleanup):
+def test_evaluate(cleanup, solver_solution_mock):
     problem = Qplib(instance := "QPLIB_0067")
     best_known = -110942
     expected = {"label": "objvar", "value": best_known}
-    assert expected == problem.evaluate(SolverSolution(energy=best_known, is_feasible=True))
+    assert expected == problem.evaluate(solver_solution_mock(energy=best_known, is_feasible=True))
 
     cleanup(get_instance_file(instance))

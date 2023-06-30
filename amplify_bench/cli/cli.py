@@ -10,8 +10,8 @@ from typing import Union
 
 import click
 
-from .benchmark import cli_benchmark
 from .download_all import cli_download_all, cli_download_clean
+from .run import cli_benchmark_run
 from .stats import cli_stats
 
 start_datetime: str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -59,7 +59,7 @@ def cli():
     is_flag=True,
     help=("It even builds the QUBO model based on the input json configuration. " "It does not run on the machine."),
 )
-def benchmark(input_json: str, label: str, output: str, parallel: int, aws_profile: str, dry_run: bool):
+def run(input_json: str, label: str, output: str, parallel: int, aws_profile: str, dry_run: bool):
     """QUBO Benchmark"""
     print(f"input_json: {input_json}")
     print(f"label: {label}")
@@ -68,7 +68,7 @@ def benchmark(input_json: str, label: str, output: str, parallel: int, aws_profi
     print(f"aws_profile: {aws_profile}")
     print(f"dry_run: {dry_run}")
 
-    cli_benchmark(input_json, label, output, parallel, aws_profile, dry_run)
+    cli_benchmark_run(input_json, label, output, parallel, aws_profile, dry_run)
 
 
 @cli.command()

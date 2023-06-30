@@ -12,9 +12,9 @@ isort = "*"
 pytest-cov = "*"
 colorama = "*"
 types-requests = "*"
+twine = "*"
+build = "*"
 
 [packages]
 amplify-benchmark = {editable=true, path="."}
 
-[pipenv]
-allow_prereleases = true

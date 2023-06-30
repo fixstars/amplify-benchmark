@@ -24,7 +24,10 @@ def download_file(url: str, dest: str) -> None:
     Returns:
         None
     """
-    response = requests.get(url)
+
+    s = requests.Session()
+    s.mount("http://", requests.adapters.HTTPAdapter(max_retries=3))
+    response = s.get(url, timeout=3.0)
     response.raise_for_status()
 
     with open(dest, "wb") as f_out:

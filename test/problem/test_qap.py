@@ -3,10 +3,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from benchmark.problem.base import gen_problem
-from benchmark.problem.qap import Qap, get_instance_file, get_sol_file, load_qap_file, load_qap_opt
-
-from ..common import SolverSolutionSimulator as SolverSolution
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.problem.qap import Qap, get_instance_file, get_sol_file, load_qap_file, load_qap_opt
 
 
 def test_load_qap_file_error(data):
@@ -59,11 +57,13 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate(cleanup):
+def test_evaluate(cleanup, solver_solution_mock):
     # infeasible case
     problem = Qap(instance := "chr12a")
     problem.make_model()
-    assert {"label": "cost", "values": None, "placement": ""} == problem.evaluate(SolverSolution(is_feasible=False))
+    assert {"label": "cost", "values": None, "placement": ""} == problem.evaluate(
+        solver_solution_mock(is_feasible=False)
+    )
 
     # feasible case
     best_known = 9552
@@ -77,7 +77,7 @@ def test_evaluate(cleanup):
         values[i][city] = 1
 
     assert expected == problem.evaluate(
-        SolverSolution(is_feasible=True, values=values.reshape((12 * 12)).tolist(), energy=9552)
+        solver_solution_mock(is_feasible=True, values=values.reshape((12 * 12)).tolist(), energy=9552)
     )
 
     cleanup(get_instance_file(instance))

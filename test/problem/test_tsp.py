@@ -5,10 +5,14 @@ import numpy as np
 import pytest
 import requests
 
-from benchmark.problem.base import gen_problem
-from benchmark.problem.tsp import Tsp, gen_random_tsp_instance, get_instance_file, load_tsp_file, load_tsp_opt_distance
-
-from ..common import SolverSolutionSimulator as SolverSolution
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.problem.tsp import (
+    Tsp,
+    gen_random_tsp_instance,
+    get_instance_file,
+    load_tsp_file,
+    load_tsp_opt_distance,
+)
 
 
 def test_load_tsp_file_error(data, cleanup):
@@ -90,14 +94,14 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate(cleanup):
+def test_evaluate(cleanup, solver_solution_mock):
     expected: Dict[str, Any] = dict()
 
     # infeasible case
     problem = Tsp(instance := "burma14")
     problem.make_model()
     expected = {"label": "total distances", "value": None, "path": ""}
-    assert expected == problem.evaluate(SolverSolution(is_feasible=False))
+    assert expected == problem.evaluate(solver_solution_mock(is_feasible=False))
 
     # feasible case
     best_known = 3323
@@ -113,7 +117,7 @@ def test_evaluate(cleanup):
     values = np.zeros((14, 14), dtype=int)
     for i, city in enumerate(path_list):
         values[i][city] = 1
-    result = problem.evaluate(SolverSolution(is_feasible=True, values=values.reshape((14 * 14)).tolist()))
+    result = problem.evaluate(solver_solution_mock(is_feasible=True, values=values.reshape((14 * 14)).tolist()))
     assert expected == result
 
     cleanup(get_instance_file(instance))

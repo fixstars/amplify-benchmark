@@ -17,7 +17,7 @@ def simple_problem():
 
 @pytest.fixture
 def data() -> Path:
-    DATA_DIR = Path(__file__).parent / ".." / "src" / "benchmark" / "problem" / "data"
+    DATA_DIR = Path(__file__).parent / ".." / "amplify_bench" / "problem" / "data"
     return DATA_DIR
 
 

@@ -3,8 +3,8 @@ import os
 import shutil
 from pathlib import Path
 
-from benchmark.cli.cli import cli
-from benchmark.cli.stats import format_result_json_to_stats_json
+from amplify_bench.cli.cli import cli
+from amplify_bench.cli.stats import format_result_json_to_stats_json
 
 
 def test_stats_output(runner):

@@ -1,4 +1,4 @@
-from benchmark.problem.base import gen_problem
+from amplify_bench.problem.base import gen_problem
 
 
 def test_gen_problem():

@@ -24,7 +24,7 @@ from ..runner import ParallelRunner, Runner
 from ..timer import timer
 
 
-def cli_benchmark(input_json: str, label: str, output: str, parallel: int, aws_profile: str, dry_run: bool):
+def cli_benchmark_run(input_json: str, label: str, output: str, parallel: int, aws_profile: str, dry_run: bool):
     if output is None:
         output = str(Path(input_json).parent)
 

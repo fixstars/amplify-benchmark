@@ -1,4 +1,5 @@
-/GSET
+/GSET/G*
+/GSET/K2000
 /QAPLIB/*.sln
 /QAPLIB/*.dat
 /QPLIB/*.qplib
@@ -15,6 +16,7 @@
 !/QPLIB/instance_list.txt
 !/SUDOKULIB/instance_list.txt
 !/TSPLIB/instance_list.txt
+!/GSET/instance_list.txt
 
 # List of best known values
 !/TSPLIB/best_solutions.csv

@@ -1,8 +1,8 @@
 import pytest
 
-from benchmark.client_config.base import get_client_config
-from benchmark.problem.base import gen_problem
-from benchmark.runner import ParallelRunner, Runner
+from amplify_bench.client_config.base import get_client_config
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.runner import ParallelRunner, Runner
 
 
 @pytest.mark.parametrize(

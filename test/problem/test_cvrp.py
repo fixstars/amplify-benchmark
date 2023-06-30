@@ -4,16 +4,14 @@ from typing import Any, Dict
 import numpy as np
 import pytest
 
-from benchmark.problem.base import gen_problem
-from benchmark.problem.cvrp import (
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.problem.cvrp import (
     Cvrp,
     get_instance_file,
     get_sol_file,
     load_cvrp_file,
     load_cvrp_opt_distance_and_nvehicle,
 )
-
-from ..common import SolverSolutionSimulator as SolverSolution
 
 
 @pytest.mark.parametrize(
@@ -98,14 +96,14 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate(cleanup):
+def test_evaluate(cleanup, solver_solution_mock):
     expected: Dict[str, Any] = dict()
 
     # infeasible case
     problem = Cvrp(instance := "E-n22-k4")
     problem.make_model()
     expected = {"label": "total distances", "value": None, "path": ""}
-    assert expected == problem.evaluate(SolverSolution(is_feasible=False))
+    assert expected == problem.evaluate(solver_solution_mock(is_feasible=False))
 
     # feasible case
     best_known = 375
@@ -128,7 +126,7 @@ def test_evaluate(cleanup):
         for i, city in enumerate(city_list):
             values[i][city][v] = 1
     result = problem.evaluate(
-        SolverSolution(
+        solver_solution_mock(
             is_feasible=True,
             values=values.reshape((13 * 22 * 4)).tolist(),
         )

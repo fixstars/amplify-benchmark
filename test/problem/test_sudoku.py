@@ -3,10 +3,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from benchmark.problem.base import gen_problem
-from benchmark.problem.sudoku import Sudoku, get_instance_file, load_sudoku_file
-
-from ..common import SolverSolutionSimulator as SolverSolution
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.problem.sudoku import Sudoku, get_instance_file, load_sudoku_file
 
 
 def test_load_sudoku_file(data):
@@ -53,11 +51,11 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate():
+def test_evaluate(solver_solution_mock):
     # infeasible case
     problem = Sudoku("9x9_h17_055")
     values = np.zeros(729, dtype=int).tolist()
-    assert "" == problem.evaluate(SolverSolution(is_feasible=False, values=values))["answer"]
+    assert "" == problem.evaluate(solver_solution_mock(is_feasible=False, values=values))["answer"]
 
     # feasible case
     expected_answer = "593461782824975361167823549719654823482397615356182974235718496671549238948236157"
@@ -67,6 +65,6 @@ def test_evaluate():
             v = expected_answer[9 * i + j]
             values[81 * i + 9 * j + int(v) - 1] = 1
 
-    result = problem.evaluate(SolverSolution(is_feasible=True, values=values))
+    result = problem.evaluate(solver_solution_mock(is_feasible=True, values=values))
     assert expected_answer == result["answer"]
     assert 0 == result["value"]

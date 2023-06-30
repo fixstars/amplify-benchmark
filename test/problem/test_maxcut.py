@@ -2,10 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from benchmark.problem.base import gen_problem
-from benchmark.problem.maxcut import MaxCut, get_instance_file, load_gset_matrix, load_gset_opt
-
-from ..common import SolverSolutionSimulator as SolverSolution
+from amplify_bench.problem.base import gen_problem
+from amplify_bench.problem.maxcut import MaxCut, get_instance_file, load_gset_matrix, load_gset_opt
 
 
 @pytest.mark.parametrize(
@@ -16,9 +14,9 @@ from ..common import SolverSolutionSimulator as SolverSolution
         ("G32", 2000, -1410),
     ],
 )
-def test_load_gset_instance(instance, N, best_known, cleanup):
+def test_load_gset_instance(instance, N, best_known, data, cleanup):
     instance_file = get_instance_file(instance)
-    problem_dir = Path(__file__) / "../../../src/benchmark/problem/data/GSET/"
+    problem_dir = data / "GSET"
     assert problem_dir.resolve() == Path(instance_file).parent.resolve()
     assert N * N == load_gset_matrix(instance_file).size
     assert best_known == load_gset_opt(instance)
@@ -62,10 +60,10 @@ def test_load_local_file():
     assert problem2.get_input_parameter()["instance"] == instance
 
 
-def test_evaluate(cleanup):
+def test_evaluate(cleanup, solver_solution_mock):
     problem = MaxCut(instance := "G1")
     best_known = 11624
     expected = {"label": "Maximum Cuts", "value": best_known}
-    assert expected == problem.evaluate(SolverSolution(energy=-best_known))
+    assert expected == problem.evaluate(solver_solution_mock(energy=-best_known))
 
     cleanup(get_instance_file(instance))

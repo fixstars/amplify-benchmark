@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from unittest.mock import MagicMock
 
-from benchmark.client_config import (  # type: ignore
+from amplify_bench.client_config import (  # type: ignore
     FixstarsClientConfig,
     FujitsuDA4SolverClientConfig,
     GurobiClientConfig,

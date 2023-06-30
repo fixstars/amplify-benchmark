@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from benchmark.cli.cli import cli
+from amplify_bench.cli.cli import cli
 
 
 def test_benchmark_dry_run(runner):
@@ -10,7 +10,7 @@ def test_benchmark_dry_run(runner):
     input_json_path = Path(__file__).parent / ".." / "data" / input_json_filename
 
     command = [
-        "benchmark",
+        "run",
         "-l",
         "test run",
         str(input_json_path),
@@ -29,7 +29,7 @@ def test_benchmark(runner):
     input_json_path = Path(__file__).parent / ".." / "data" / input_json_filename
 
     command = [
-        "benchmark",
+        "run",
         "-l",
         "test run",
         str(input_json_path),

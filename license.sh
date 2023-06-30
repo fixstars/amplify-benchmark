@@ -1,4 +1,4 @@
-SRC_DIR=src
+SRC_DIR=amplify_bench
 EXCEPT_LAST_LIST=(
     '.json'
     '.html'

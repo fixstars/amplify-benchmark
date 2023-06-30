@@ -10,7 +10,7 @@ python-src-format:
   script:
     - pip install pipenv
     - pipenv install --dev --skip-lock
-    - pipenv run black --check src/ && pipenv run isort --check src/
+    - pipenv run black --check amplify_bench/ && pipenv run isort --check amplify_bench/
     - pipenv run black --check test/ && pipenv run isort --check test/
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -23,8 +23,8 @@ python-src-lint:
   script:
     - pip install pipenv
     - pipenv install --dev --skip-lock
-    - pipenv run flake8 src/ && pipenv run mypy src/
-    - pipenv run flake8 test/ && pipenv run mypy test/
+    - pipenv run flake8 amplify_bench/ && pipenv run mypy amplify_bench/
+    - pipenv run flake8 test/ && pipenv run mypy --explicit-package-bases test/
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
@@ -36,12 +36,18 @@ python-test:
   script:
     - pip install pipenv
     - pipenv install --dev --skip-lock
-    - pipenv run pytest --cov=src test/
+    - pipenv run pytest --cov=src --cov-report term --cov-report xml:coverage.xml test/
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report: 
+        coverage_format: cobertura
+        path: coverage.xml
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 
-coverage:
+python-test-slow:
   stage: scan
   tags:
     - docker
@@ -93,7 +99,7 @@ check-license:
   script:
     - bash license.sh
     - >
-      if [[ $(git diff --name-only HEAD | grep -e src/ || echo '') != "" ]]; then
+      if [[ $(git diff --name-only HEAD | grep -e amplify_bench/ || echo '') != "" ]]; then
         RED="\e[31m"
         END_COLOR="\e[0m"
 
