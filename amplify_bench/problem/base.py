@@ -44,6 +44,14 @@ class Problem(ABC):
         self._model = None
         self._problem_parameters = dict()  # TODO: set default value
 
+    def __eq__(self, other):
+        return (
+            (type(self) == type(other))
+            and (self._instance == other._instance)
+            and (self._problem_parameters == other._problem_parameters)
+            and (self._best_known == other._best_known)
+        )
+
     @abstractmethod
     def make_model(self):
         pass

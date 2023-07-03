@@ -12,6 +12,7 @@ isort = "*"
 pytest-cov = "*"
 colorama = "*"
 types-requests = "*"
+types-PyYAML = "*"
 twine = "*"
 build = "*"
 

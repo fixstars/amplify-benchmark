@@ -1,9 +1,33 @@
 {
     "description": "For validation of json files for benchmark conditions",
     "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "jobs"
+    ],
     "definitions": {
-        "problem_obj":{
+        "Variables": {
+            "type": "string",
+            "pattern": "^\\$.+"
+        },
+        "Parameters": {
+            "additionalProperties": false,
             "type": "object",
+            "patternProperties": {
+                ".*": {
+                    "type": [
+                        "string",
+                        "number",
+                        "boolean",
+                        "array"
+                    ]
+                }
+            }
+        },
+        "Problem": {
+            "additionalProperties": false,
+            "type": "object",
+            "description": "A problem to be solved by a client",
             "required": [
                 "class",
                 "instance"
@@ -16,79 +40,146 @@
                     "type": "string"
                 },
                 "parameters": {
-                    "type": "object"
-                },
-                "path": {
-                    "type": "string"
+                    "description": "Parameters to be passed to the problem",
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/Variables"
+                        },
+                        {
+                            "$ref": "#/definitions/Parameters"
+                        }
+                    ]
                 }
             }
         },
-        "client_obj":{
+        "Client": {
+            "additionalProperties": false,
             "type": "object",
+            "description": "A client to solve a problem",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "name": {
+                    "description": "Name of the client to be used",
                     "type": "string"
                 },
-                "url": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "proxy": {
-                    "type": "string"
+                "settings": {
+                    "description": "Settings to be passed to the client",
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/Variables"
+                        },
+                        {
+                            "$ref": "#/definitions/Parameters"
+                        }
+                    ]
                 },
                 "parameters": {
-                    "type": "object"
+                    "description": "Parameters to be passed to the client",
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/Variables"
+                        },
+                        {
+                            "$ref": "#/definitions/Parameters"
+                        }
+                    ]
                 }
             }
         }
     },
     "properties": {
-        "client": {
+        "variables": {
+            "additionalProperties": false,
             "type": "object",
-            "$ref": "#/definitions/client_obj"
+            "description": "Variables to be used in the benchmark",
+            "patternProperties": {
+                ".*": {
+                    "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                    ]
+                }
+            }
         },
         "jobs": {
             "type": "array",
+            "description": "Jobs to be run in the benchmark",
             "items": {
                 "type": "object",
+                "additionalProperties": false,
                 "required": [
-                    "problem"
+                    "num_samples",
+                    "problem",
+                    "client"
                 ],
                 "properties": {
                     "num_samples": {
-                        "type": "number"
-                    },
-                    "problem": {
-                        "anyOf": [
+                        "description": "Number of samples to take for this job",
+                        "oneOf": [
                             {
-                                "type": "object",
-                                "$ref": "#/definitions/problem_obj"
+                                "$ref": "#/definitions/Variables"
                             },
                             {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "$ref": "#/definitions/problem_obj"
-                                }
+                                "type": "number"
+                            }
+                        ]
+                    },
+                    "problem": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/definitions/Variables"
+                            },
+                            {
+                                "$ref": "#/definitions/Problem"
                             }
                         ]
                     },
                     "client": {
-                        "anyOf": [
+                        "oneOf": [
                             {
-                                "type": "object",
-                                "$ref": "#/definitions/client_obj"
+                                "$ref": "#/definitions/Variables"
                             },
                             {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "$ref": "#/definitions/client_obj"
-                                }
+                                "$ref": "#/definitions/Client"
                             }
                         ]
+                    },
+                    "matrix": {
+                        "type": "object",
+                        "description": "Matrix to be used for this job",
+                        "patternProperties": {
+                            ".*": {
+                                "type": "array",
+                                "items": {
+                                    "oneOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "number"
+                                        },
+                                        {
+                                            "type": "boolean"
+                                        },
+                                        {
+                                            "type": "array"
+                                        },
+                                        {
+                                            "$ref": "#/definitions/Problem"
+                                        },
+                                        {
+                                            "$ref": "#/definitions/Client"
+                                        },
+                                        {
+                                            "$ref": "#/definitions/Parameters"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
                     }
                 }
             }

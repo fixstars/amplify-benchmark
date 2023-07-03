@@ -8,20 +8,18 @@ import json
 import os
 import shutil
 import warnings
-from itertools import product
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import List, Optional, Tuple
 from urllib.parse import urlparse
 
 import boto3
-from jsonschema import validate
 
-from ..client_config.base import ClientConfig, get_client_config
-from ..problem.base import Problem, gen_problem
+from ..client_config.base import ClientConfig
+from ..problem.base import Problem
 from ..result import BenchmarkResult
 from ..runner import ParallelRunner, Runner
-from ..timer import timer
+from .parser import parse_input_data
 
 
 def cli_benchmark_run(input_json: str, label: str, output: str, parallel: int, aws_profile: str, dry_run: bool):
@@ -54,7 +52,7 @@ def cli_benchmark_impl(input_json: Path, label: str, output: Path, n_parallel: i
     start_datetime: str = datetime.datetime.now().astimezone().strftime("%Y%m%d_%H%M%S")
     print(f"cli_benchmark_impl() {start_datetime}")
 
-    job_template_list = _parse_input_json(input_json)
+    job_template_list = parse_input_data(input_json)
 
     # dry run の場合は QUBO model を作って終了
     if dry_run:
@@ -63,62 +61,6 @@ def cli_benchmark_impl(input_json: Path, label: str, output: Path, n_parallel: i
     results = _run_benchmark(job_template_list, n_parallel, label)
 
     _save_result_json(results, input_json, output, start_datetime)
-
-
-@timer
-def _validation(input_json: dict):
-    with open(Path(__file__).parent / "schemas" / "benchmark.json") as f:
-        json_schema = json.load(f)
-    validate(instance=input_json, schema=json_schema)
-
-
-@timer
-def _parse_input_json(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
-    j = json.load(filepath.open())
-    _validation(j)
-
-    client_json = j["client"]
-    client_name: str = client_json["name"]
-    client_settings: dict = {k: v for (k, v) in client_json.items() if k not in ["name", "parameters"]}
-    client_default_parameters = client_json.get("parameters", dict())
-
-    job_template_list: List[Tuple[Problem, ClientConfig, int]] = []
-
-    for benchmark_group in j["jobs"]:
-        num_samples = benchmark_group.get("num_samples", 1)
-
-        # problem_parameters, client_parameters 共に array で指定可能. その場合全てのパラメータの組をjobに登録
-        problem_json = benchmark_group["problem"]
-        if type(problem_json) == dict:
-            problem_json_list = [problem_json]
-        else:
-            problem_json_list = problem_json
-
-        problem_list: List[Problem] = list()
-        for p_json in problem_json_list:
-            problem_class: str = p_json["class"]
-            problem_instance: str = p_json["instance"]
-            problem_parameters: dict = p_json.get("parameters", dict())
-            if "path" in p_json:
-                problem_parameters["path"] = p_json.get("path")
-            problem_list.append(gen_problem(problem_class, problem_instance, **problem_parameters))
-
-        job_client_json = benchmark_group.get("client", dict())
-        if type(job_client_json) == dict:
-            job_client_json_list = [job_client_json]
-        else:
-            job_client_json_list = job_client_json
-
-        for problem, j_c_json in product(problem_list, job_client_json_list):
-            settings = client_settings.copy()
-            settings.update(j_c_json.get("settings", dict()))
-            parameters = client_default_parameters.copy()
-            parameters.update(j_c_json.get("parameters", dict()))
-            client_config = get_client_config(settings, parameters, client_name)
-
-            job_template_list.append((problem, client_config, num_samples))
-
-    return job_template_list
 
 
 def _run_benchmark(

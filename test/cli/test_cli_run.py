@@ -6,7 +6,7 @@ from amplify_bench.cli.cli import cli
 
 
 def test_benchmark_dry_run(runner):
-    input_json_filename = "benchmark.json"
+    input_json_filename = "benchmark.yml"
     input_json_path = Path(__file__).parent / ".." / "data" / input_json_filename
 
     command = [
@@ -25,7 +25,7 @@ def test_benchmark_dry_run(runner):
 
 @pytest.mark.slow
 def test_benchmark(runner):
-    input_json_filename = "benchmark.json"
+    input_json_filename = "benchmark.yml"
     input_json_path = Path(__file__).parent / ".." / "data" / input_json_filename
 
     command = [

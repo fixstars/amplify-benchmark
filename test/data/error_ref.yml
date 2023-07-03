@@ -1,0 +1,33 @@
+variables:
+  TOKEN: "aiueo"
+jobs:
+  - problem:
+      class: Tsp
+      instance: $INSTANCE
+      parameters:
+        constraint_weight: $WEIGHT
+    client: $CLIENT
+    num_samples: $SAMPLES
+    matrix:
+      INSTANCE:
+        - eil51
+        - berlin52
+        - pr76
+      WEIGHT:
+        - 1
+        - 2
+        - 3
+      TIMEOUTS:
+        - 1000
+        - 2000
+        - 3000
+      CLIENT:
+        - name: FixstarsClient
+          settings:
+            url: "https://HOGEHOGE"
+            token: $TOKEN
+          parameters:
+            timeout: $TIMEOUTS
+        - name: GurobiClient
+          parameters:
+            timeout: $TIMEOUTS
