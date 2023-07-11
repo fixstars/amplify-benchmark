@@ -16,7 +16,7 @@ from .client_config.base import ClientConfig
 from .job import Job
 from .problem.base import Problem
 from .result import BenchmarkResult, JobFailedError, JobResult, NumTrialError
-
+import warnings
 
 class Runner:
     def __init__(self):
@@ -99,33 +99,29 @@ def _run_job_impl(job: Job) -> JobResult:
         solver.client.parameters.outputs.sort = False
         solver.client.parameters.outputs.num_outputs = 0
 
-    NUM_TRIALS = 2
-    for _ in range(NUM_TRIALS):
-        try:
-            result = solver.solve(job.problem.model)
-            job_result = JobResult.from_result(
-                job,
-                result.solutions,
-                solver.client_result,
-                solver.logical_result,
-                job_error=None,
-            )
-        except RuntimeError as err:
-            # KeyboardInterruptではなく RuntimeError('KeyboardInterrupt') をcatch
-            if err.args[0] == "KeyboardInterrupt":
-                raise err
-            else:
-                continue
-        except OSError as err:
+    try:
+        result = solver.solve(job.problem.model)
+        job_result = JobResult.from_result(
+            job,
+            result.solutions,
+            solver.client_result,
+            solver.logical_result,
+            job_error=None,
+        )
+    except RuntimeError as err:
+        # KeyboardInterruptではなく RuntimeError('KeyboardInterrupt') をcatch
+        if err.args[0] == "KeyboardInterrupt":
             raise err
-        else:
-            return job_result
-
-    job_result = JobResult.from_result(
-        job,
-        [],
-        solver.client_result,
-        solver.logical_result,
-        job_error=JobFailedError(job.job_id, "Failed to send job to the solver\n" + traceback.format_exc()),
-    )
-    raise NumTrialError(NUM_TRIALS, job_result)
+        warnings.warn(err.args[0])
+        job_result = JobResult.from_result(
+            job,
+            [],
+            solver.client_result,
+            solver.logical_result,
+            job_error=JobFailedError(job.job_id, "Failed to send job to the solver\n" + traceback.format_exc()),
+        )
+        return job_result
+    except OSError as err:
+        raise err
+    else:
+        return job_result

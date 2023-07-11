@@ -53,6 +53,7 @@ def cli_benchmark_impl(input_json: Path, label: str, output: Path, n_parallel: i
     print(f"cli_benchmark_impl() {start_datetime}")
 
     job_template_list = parse_input_data(input_json)
+    total_num_jobs = sum([num_samples for _, _, num_samples in job_template_list])
 
     # dry run の場合は QUBO model を作って終了
     if dry_run:
@@ -60,7 +61,7 @@ def cli_benchmark_impl(input_json: Path, label: str, output: Path, n_parallel: i
         return
     results = _run_benchmark(job_template_list, n_parallel, label)
 
-    _save_result_json(results, input_json, output, start_datetime)
+    _save_result_json(results, input_json, output, start_datetime, total_num_jobs)
 
 
 def _run_benchmark(
@@ -91,34 +92,33 @@ def _save_result_json(
     input: Path,
     output: Path,
     start_datetime: str,
+    total_num_jobs: int
 ):
-    def outputfile(inputfile: Path, time: str):
-        return inputfile.stem + "_" + time + ".json"
+    def output_file(input_file: Path, time: str):
+        return input_file.stem + "_" + time + ".json"
 
-    def errorlogfile(inputfile: Path, time: str):
-        return inputfile.stem + "_" + time + "_error.json"
+    def error_logfile(input_file: Path, time: str):
+        return input_file.stem + "_" + time + "_error.json"
 
     def report_by_json(file: Path, result: List[dict]):
-        with open(file, "w") as ofile:
-            ofile.write(json.dumps(result, indent=4))
+        with open(file, "w") as f:
+            f.write(json.dumps(result, indent=4))
 
     # 成功した job の結果を保存
     job_result = results.get_valid_summaries()
     job_failed = results.get_errors()
-    num_jobs = len(job_result) + len(job_failed)
+    print("total jobs: ", total_num_jobs)
+    print("success jobs: ", len(job_result))
+    print("error jobs: ", len(job_failed))
+    print("Jobs not yet started: ", total_num_jobs - len(job_result) - len(job_failed))
 
-    print(f"{len(job_result)} (out of {num_jobs}) jobs finished successfully.")
+
     if len(job_result) > 0:
-        file = output / outputfile(input, start_datetime)
-        report_by_json(file, job_result)
+        report_by_json(output / output_file(input, start_datetime), job_result)
 
     # 失敗した job の例外内容を保存
     if len(job_failed) != 0:
-        file = output / errorlogfile(input, start_datetime)
-        report_by_json(file, job_failed)
-
-    # 成功すれば0、失敗すれば1
-    return 0 if len(job_failed) == 0 else 1
+        report_by_json(output / error_logfile(input, start_datetime), job_failed)
 
 
 def _save_result_local(temp_d: str, output: str):
