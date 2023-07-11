@@ -94,7 +94,7 @@ def test_toshiba_client_config(simple_problem):
 
 def test_toshiba_sqbm2(simple_problem):
     client_config_data = ToshibaSQBM2ClientConfig(
-        settings := {"url": "http://44.239.238.48:8000"},
+        settings := {"url": "http://xxx.xxx.xxx.xxx:8000"},
         parameters := {"timeout": 1, "loops": 0, "maxout": 5},
     )
 

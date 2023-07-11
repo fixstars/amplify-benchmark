@@ -85,7 +85,7 @@ def test_random_tsp_problem(instance: str, seed: int):
 
 
 def test_load_local_file():
-    filepath = Path(__file__).parent / "data" / "burma14.tsp"
+    filepath = Path(__file__).parent / "data" / "rand_10.tsp"
     instance = filepath.stem
     problem = Tsp(instance, path=str(filepath))
     assert problem.get_input_parameter()["instance"] == instance

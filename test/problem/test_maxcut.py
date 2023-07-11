@@ -51,7 +51,7 @@ def test_maxcut_problem(instance: str, best_known: int, cleanup):
 
 
 def test_load_local_file():
-    filepath = Path(__file__).parent / "data" / "G1"
+    filepath = Path(__file__).parent / "data" / "maxcut_sample.txt"
     instance = filepath.stem
     problem = MaxCut(instance, path=str(filepath))
     assert problem.get_input_parameter()["instance"] == instance

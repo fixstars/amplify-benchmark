@@ -23,7 +23,7 @@ def test_qplib_problem(instance: str, best_known: int, cleanup):
 
 
 def test_load_local_file():
-    filepath = Path(__file__).parent / "data" / "QPLIB_0067.qplib"
+    filepath = Path(__file__).parent / "data" / "QPLIB_sample.qplib"
     instance = filepath.stem
     problem = Qplib(instance, path=str(filepath))
     assert problem.get_input_parameter()["instance"] == instance

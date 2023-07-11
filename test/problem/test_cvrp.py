@@ -87,7 +87,7 @@ def test_cvrp_problem(instance: str, best_known: float, kp: float, cleanup):
 
 
 def test_load_local_file():
-    filepath = Path(__file__).parent / "data" / "A-n32-k5.vrp"
+    filepath = Path(__file__).parent / "data" / "vrp_sample.vrp"
     instance = filepath.stem
     problem = Cvrp(instance, path=str(filepath))
     assert problem.get_input_parameter()["instance"] == instance

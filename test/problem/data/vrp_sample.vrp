@@ -1,5 +1,5 @@
-NAME : A-n32-k5
-COMMENT : (Augerat et al, No of trucks: 5, Optimal value: 784)
+NAME : vrp_sample
+COMMENT : hoge
 TYPE : CVRP
 DIMENSION : 32
 EDGE_WEIGHT_TYPE : EUC_2D 

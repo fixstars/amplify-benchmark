@@ -48,7 +48,7 @@ def test_load_qap(instance, n, best_known, cleanup):
 
 
 def test_load_local_file():
-    filepath = Path(__file__).parent / "data" / "chr12a.dat"
+    filepath = Path(__file__).parent / "data" / "qap_10.dat"
     instance = filepath.name
     problem = Qap(instance, path=str(filepath))
     assert problem.get_input_parameter()["instance"] == instance
