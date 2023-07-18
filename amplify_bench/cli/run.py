@@ -92,7 +92,7 @@ def _save_result_json(
     input: Path,
     output: Path,
     start_datetime: str,
-    total_num_jobs: int
+    total_num_jobs: int,
 ):
     def output_file(input_file: Path, time: str):
         return input_file.stem + "_" + time + ".json"
@@ -111,7 +111,6 @@ def _save_result_json(
     print("success jobs: ", len(job_result))
     print("error jobs: ", len(job_failed))
     print("Jobs not yet started: ", total_num_jobs - len(job_result) - len(job_failed))
-
 
     if len(job_result) > 0:
         report_by_json(output / output_file(input, start_datetime), job_result)
@@ -134,13 +133,13 @@ def _push_s3(dname: str, s3_url: str, session: boto3.Session):
     s3 = session.resource("s3")
 
     parsed_s3_url = urlparse(s3_url)
-    s3bucket = s3.Bucket(parsed_s3_url.netloc)
+    s3bucket = s3.Bucket(parsed_s3_url.netloc)  # type: ignore
     for file in list(Path(dname).iterdir()):
         key = str(Path(parsed_s3_url.path) / file.name).lstrip("/")
         s3bucket.upload_file(str(file), key)
 
 
-def _get_session(aws_profile: Optional[str] = None) -> Optional[dict]:
+def _get_session(aws_profile: Optional[str] = None) -> boto3.Session:
     dotenv_path = Path().cwd() / ".env"
 
     if dotenv_path.exists():

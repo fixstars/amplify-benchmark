@@ -8,7 +8,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
 import amplify
-from amplify import SolverSolution
+from amplify import SolverSolution  # type: ignore
 
 from .job import Job
 from .problem.base import AmplifyModel
@@ -22,7 +22,7 @@ def _get_amplify_version() -> str:
         return ""
 
 
-def _make_basic_summary(model: AmplifyModel, solution: SolverSolution) -> dict:
+def _make_basic_summary(model: AmplifyModel, solution: SolverSolution) -> dict:  # type: ignore
     target_energy = solution.energy
     checks = model.check_constraints(solution.values)
     satisfied = len(list(filter(None, map(lambda x: x[1], checks))))

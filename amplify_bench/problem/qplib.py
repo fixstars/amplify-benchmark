@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
-from amplify import BinaryQuadraticModel, InequalityFormulation, SolverSolution, load_qplib
+from amplify import BinaryQuadraticModel, InequalityFormulation, SolverSolution, load_qplib  # type: ignore
 
 from ..downloader import download_instance_file
 from ..timer import print_log, timer

@@ -16,6 +16,7 @@ import boto3
 import numpy as np
 import pandas as pd
 from jsonschema import validate
+from mypy_boto3_s3 import S3Client, S3ServiceResource
 from tqdm import tqdm
 
 from ..timer import timer
@@ -117,6 +118,8 @@ def _load_jsons(json_path_str: str) -> list:
         for j_p in json_path.rglob("*.json"):
             d = _load_jsons(str(j_p))
             data.extend(d)
+    else:
+        raise FileNotFoundError(f"{json_path_str} is not found.")
     return validation(data, label=json_path_str)
 
 
@@ -131,12 +134,12 @@ def _load_jsons_from_s3(s3_url: str, aws_profile: Optional[str]) -> list:
         list: data of json file(s)
     """
 
-    def _get_object(s3_client: boto3.client, bucket_name: str, key: str):
+    def _get_object(s3_client: S3Client, bucket_name: str, key: str):
         obj = s3_client.get_object(Bucket=bucket_name, Key=key)
         json_txt = obj["Body"].read()
         return json.loads(json_txt)
 
-    def _get_list_objects(s3_client: boto3.client, bucket_name: str, prefix: str) -> list:
+    def _get_list_objects(s3_client: S3Client, bucket_name: str, prefix: str) -> list:
         response = s3_client.list_objects_v2(
             Bucket=bucket_name,
             Prefix=key,
@@ -154,12 +157,12 @@ def _load_jsons_from_s3(s3_url: str, aws_profile: Optional[str]) -> list:
         return contents
 
     print(f"Pull results from {s3_url}")
-    session = _get_session(aws_profile)
+    session: boto3.Session = _get_session(aws_profile)
     parsed_s3_url = urlparse(s3_url)
     bucket_name = parsed_s3_url.netloc
     key = parsed_s3_url.path.lstrip("/")
 
-    s3: boto3.resource = session.resource("s3")
+    s3: S3ServiceResource = session.resource("s3")  # type: ignore
     s3_client = s3.meta.client
     data_li = []
     if Path(key).suffix == "json":

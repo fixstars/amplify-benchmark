@@ -10,8 +10,12 @@ import networkx
 import numpy as np
 import tsplib95
 import vrplib
-from amplify import BinaryQuadraticModel, BinarySymbolGenerator, IntegerEncodingMethod, SolverSolution, einsum
-from amplify.constraint import less_equal, one_hot, penalty
+from amplify import BinaryQuadraticModel  # type: ignore
+from amplify import BinarySymbolGenerator  # type: ignore
+from amplify import IntegerEncodingMethod  # type: ignore
+from amplify import SolverSolution  # type: ignore
+from amplify import einsum  # type: ignore
+from amplify.constraint import less_equal, one_hot, penalty  # type: ignore
 
 from ..timer import print_log, timer
 from .base import Problem
@@ -181,11 +185,11 @@ class WeightTypeError(Exception):
 def load_cvrp_file(filepath) -> Tuple[int, int, np.ndarray, list, dict, int]:
     problem = tsplib95.load(filepath)
 
-    capacity: int = problem.capacity
-    dimension: int = problem.dimension
-    demand: dict = problem.demands
-    depot: int = problem.depots
-    coord: dict = problem.node_coords
+    capacity: int = problem.capacity  # type: ignore
+    dimension: int = problem.dimension  # type: ignore
+    demand: dict = problem.demands  # type: ignore
+    depot: int = problem.depots  # type: ignore
+    coord: dict = problem.node_coords  # type: ignore
 
     if dimension > 1000:
         raise NumCitiesError(f"{problem.name} number of cities too large: {dimension}")
@@ -204,6 +208,7 @@ def load_cvrp_file(filepath) -> Tuple[int, int, np.ndarray, list, dict, int]:
 def load_cvrp_opt_routes(opt_file_path) -> Tuple[int, dict]:
     routes = dict()
     k = 0
+    cost = 0
     with open(opt_file_path, "r") as f:
         for _line in f:
             line = _line.split()

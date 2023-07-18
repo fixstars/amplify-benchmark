@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Optional, Tuple
 
 import numpy as np
-from amplify import BinaryMatrix, BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution
-from amplify.constraint import one_hot
+from amplify import BinaryMatrix, BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution  # type: ignore
+from amplify.constraint import one_hot  # type: ignore
 
 from ..downloader import download_instance_file
 from ..timer import print_log, timer

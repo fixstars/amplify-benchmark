@@ -3,14 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from unittest.mock import MagicMock
 
-from amplify_bench.client_config import (  # type: ignore
-    FixstarsClientConfig,
-    FujitsuDA4SolverClientConfig,
-    GurobiClientConfig,
-    ToshibaClientConfig,
-    ToshibaSQBM2ClientConfig,
-    get_client_config,
-)
+from amplify_bench.client_config import FixstarsClientConfig  # type: ignore
+from amplify_bench.client_config import FujitsuDA4SolverClientConfig  # type: ignore
+from amplify_bench.client_config import GurobiClientConfig  # type: ignore
+from amplify_bench.client_config import ToshibaClientConfig  # type: ignore
+from amplify_bench.client_config import ToshibaSQBM2ClientConfig  # type: ignore
+from amplify_bench.client_config import get_client_config  # type: ignore
 
 FIXSTARS_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 TOSHIBA_TOKEN = "SQBM+/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

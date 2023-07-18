@@ -15,7 +15,7 @@ types-requests = "*"
 types-PyYAML = "*"
 twine = "*"
 build = "*"
+mypy-boto3-s3 = "*"
 
 [packages]
 amplify-benchmark = {editable=true, path="."}
-

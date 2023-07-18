@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Optional, Tuple
 
 import numpy as np
-from amplify import BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution
-from amplify.constraint import one_hot
+from amplify import BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution  # type: ignore
+from amplify.constraint import one_hot  # type: ignore
 
 from ..timer import print_log, timer
 from .base import Problem
@@ -121,8 +121,7 @@ def make_sudoku_model(initial: str) -> Tuple[np.ndarray, BinaryQuadraticModel]:
     for s in np.where(np.array(list(initial)) != ".")[0]:
         i = s // N
         j = s % N
-        if initial[s] != ".":
-            k = to_dec(initial[s]) - 1
+        k = to_dec(initial[s]) - 1
 
         q[i, :, k] = 0  # 制約(a)
         q[:, j, k] = 0  # 制約(b)

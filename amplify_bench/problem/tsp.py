@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import networkx
 import numpy as np
 import tsplib95
-from amplify import BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution, einsum
-from amplify.constraint import one_hot
+from amplify import BinaryQuadraticModel, BinarySymbolGenerator, SolverSolution, einsum  # type: ignore
+from amplify.constraint import one_hot  # type: ignore
 from tsplib95.utils import RadianGeo
 
 from ..downloader import download_instance_file
@@ -110,7 +110,7 @@ def gen_random_tsp_instance(instance: str, seed: int = 0) -> Tuple[int, np.ndarr
 
 def load_tsp_file(problem_file: str) -> Tuple[int, np.ndarray, Optional[np.ndarray]]:
     problem = tsplib95.load(problem_file)
-    ncity = problem.dimension
+    ncity: int = problem.dimension  # type: ignore
 
     if ncity > 1000:
         raise RuntimeError(f"{problem.name} number of cities too large: {ncity}")
@@ -120,14 +120,18 @@ def load_tsp_file(problem_file: str) -> Tuple[int, np.ndarray, Optional[np.ndarr
     distance_matrix = np.array(networkx.to_numpy_matrix(graph))
 
     if problem.is_depictable():
-        locations_dict = dict()
-        if len(problem.display_data) != 0:
-            locations_dict = problem.display_data
+        locations_dict: dict = dict()
+        if len(problem.display_data) != 0:  # type: ignore
+            locations_dict = problem.display_data  # type: ignore
         else:
+
+            def get_location_dict(node_coords, map_func) -> dict:
+                return {k: map_func(v) for k, v in node_coords.items()}
+
             if problem.edge_weight_type == "GEO":
-                locations_dict = {k: (RadianGeo(v).lat, RadianGeo(v).lng) for k, v in problem.node_coords.items()}
+                locations_dict = get_location_dict(problem.node_coords, lambda v: (RadianGeo(v).lat, RadianGeo(v).lng))
             else:
-                locations_dict = problem.node_coords
+                locations_dict = get_location_dict(problem.node_coords, lambda v: v)
 
         locations = np.array([locations_dict[i + 1] for i in range(ncity)])
     else:

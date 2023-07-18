@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 import requests
+import requests.adapters
 
 current_dir = Path(__file__).parent
 

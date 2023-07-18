@@ -7,8 +7,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from amplify import SolverSolution
-from amplify.client import FixstarsClientResult
+from amplify import SolverSolution  # type: ignore
+from amplify.client import FixstarsClientResult  # type: ignore
 
 from .base import ClientConfig
 

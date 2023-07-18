@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import numpy as np
-from amplify import BinaryMatrix, BinaryQuadraticModel, SolverSolution
+from amplify import BinaryMatrix, BinaryQuadraticModel, SolverSolution  # type: ignore
 
 from ..downloader import download_instance_file
 from ..timer import print_log, timer

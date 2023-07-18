@@ -8,17 +8,15 @@ import importlib
 from abc import ABC, abstractmethod
 from typing import Union
 
-from amplify import (
-    BinaryIntPolyArray,
-    BinaryIntQuadraticModel,
-    BinaryPolyArray,
-    BinaryQuadraticModel,
-    IsingIntPolyArray,
-    IsingIntQuadraticModel,
-    IsingPolyArray,
-    IsingQuadraticModel,
-    SolverSolution,
-)
+from amplify import BinaryIntPolyArray  # type: ignore
+from amplify import BinaryIntQuadraticModel  # type: ignore
+from amplify import BinaryPolyArray  # type: ignore
+from amplify import BinaryQuadraticModel  # type: ignore
+from amplify import IsingIntPolyArray  # type: ignore
+from amplify import IsingIntQuadraticModel  # type: ignore
+from amplify import IsingPolyArray  # type: ignore
+from amplify import IsingQuadraticModel  # type: ignore
+from amplify import SolverSolution  # type: ignore
 
 from ..util import dict_to_hash
 

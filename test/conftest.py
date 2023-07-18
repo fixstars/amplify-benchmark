@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import pytest
-from amplify import BinarySymbolGenerator
-from amplify.constraint import equal_to
+from amplify import BinarySymbolGenerator  # type: ignore
+from amplify.constraint import equal_to  # type: ignore
 
 
 @pytest.fixture

@@ -6,17 +6,18 @@
 import os
 import signal
 import traceback
+import warnings
 from multiprocessing import Pool
 from typing import List
 from uuid import uuid4
 
-from amplify import Solver
+from amplify import Solver  # type: ignore
 
 from .client_config.base import ClientConfig
 from .job import Job
 from .problem.base import Problem
-from .result import BenchmarkResult, JobFailedError, JobResult, NumTrialError
-import warnings
+from .result import BenchmarkResult, JobFailedError, JobResult
+
 
 class Runner:
     def __init__(self):
