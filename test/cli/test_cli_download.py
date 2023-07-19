@@ -109,8 +109,9 @@ def test_qap_download(runner, data):
 
     # instance_listに含まれるインスタンスがdownloadされていることを確認する
     with open(instance_dir / "instance_list.txt", "r") as f:
-        instance_set = set(line.strip() for line in f.readlines())
-        assert set(file.stem for file in file_list) == instance_set
+        expected_instance_set = set(line.strip() for line in f.readlines())
+        download_set = set(file.stem for file in file_list)
+        assert download_set == expected_instance_set
 
     # downloadしたファイルを削除する
     cli_download_clean(input_class)

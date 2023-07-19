@@ -37,7 +37,6 @@ esc32b
 esc32c
 esc32d
 esc32e
-esc32f
 esc32g
 esc32h
 esc64a

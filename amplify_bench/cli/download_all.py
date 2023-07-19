@@ -56,7 +56,8 @@ def clean_tsp():
 
 
 def download_qap_all():
-    URL = "https://www.opt.math.tugraz.at/qaplib/data.d/qapdata.tar.gz"
+    # URL = "https://www.opt.math.tugraz.at/qaplib/data.d/qapdata.tar.gz"
+    URL = "http://coral.ise.lehigh.edu/wp-content/uploads/2014/07/qapdata.tar.gz"
     gz_file = qap_dir / "qapdata.tar.gz"
 
     download_file(URL, str(gz_file))
