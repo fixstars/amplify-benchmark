@@ -112,3 +112,27 @@ def test_yml_parser():
         parse_input_data(Path(__file__).parent / ".." / "data" / "error_invalid_file_extension.txt")
 
         assert str(e.value) == "invalid file extension: .txt must be .json or .yml or .yaml"
+
+    # test variable
+    input_filename = "variable.yml"
+    input_path = Path(__file__).parent / ".." / "data" / input_filename
+    expected = [
+        (
+            gen_problem("Tsp", "burma14"),
+            get_client_config({}, {"outputs": {"feasibilities": True}, "timeout": 1000}, "FixstarsClient"),
+            100,
+        ),
+        (
+            gen_problem("Tsp", "ulysses16"),
+            get_client_config({}, {"outputs": {"feasibilities": True}, "timeout": 3000}, "FixstarsClient"),
+            100,
+        ),
+        (
+            gen_problem("Tsp", "bayg29"),
+            get_client_config({}, {"outputs": {"feasibilities": True}, "timeout": 3000}, "FixstarsClient"),
+            100,
+        ),
+    ]
+    case = TestCase()
+    ret = parse_input_data(input_path)
+    case.assertCountEqual(ret, expected)

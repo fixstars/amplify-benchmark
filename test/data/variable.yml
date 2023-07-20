@@ -1,0 +1,28 @@
+variables:
+  NUM_SAMPLES: 100
+  CLIENT:
+    - FixstarsClient
+    - parameters:
+        outputs:
+          feasibilities: true
+        timeout: $TIMEOUT
+jobs:
+  - problem:
+      class: Tsp
+      instance: burma14
+    client: $CLIENT
+    num_samples: $NUM_SAMPLES
+    matrix:
+      TIMEOUT:
+        - 1000
+  - problem:
+      class: Tsp
+      instance: $INSTANCE
+    client: $CLIENT
+    num_samples: $NUM_SAMPLES
+    matrix:
+      INSTANCE:
+        - ulysses16
+        - bayg29
+      TIMEOUT:
+        - 3000

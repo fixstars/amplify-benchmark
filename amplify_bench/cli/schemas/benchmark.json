@@ -19,7 +19,8 @@
                         "string",
                         "number",
                         "boolean",
-                        "array"
+                        "array",
+                        "object"
                     ]
                 }
             }
@@ -53,40 +54,32 @@
             }
         },
         "Client": {
-            "additionalProperties": false,
-            "type": "object",
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
             "description": "A client to solve a problem",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "name": {
-                    "description": "Name of the client to be used",
-                    "type": "string"
+            "prefixItems": [
+                {
+                    "type": "string",
+                    "description": "client class name",
+                    "pattern": ".*Client"
                 },
-                "settings": {
-                    "description": "Settings to be passed to the client",
-                    "oneOf": [
-                        {
-                            "$ref": "#/definitions/Variables"
-                        },
-                        {
-                            "$ref": "#/definitions/Parameters"
+                {
+                    "type": "object",
+                    "description": "client properties",
+                    "patternProperties": {
+                        ".*": {
+                            "type": [
+                                "string",
+                                "number",
+                                "boolean",
+                                "array",
+                                "object"
+                            ]
                         }
-                    ]
-                },
-                "parameters": {
-                    "description": "Parameters to be passed to the client",
-                    "oneOf": [
-                        {
-                            "$ref": "#/definitions/Variables"
-                        },
-                        {
-                            "$ref": "#/definitions/Parameters"
-                        }
-                    ]
+                    }
                 }
-            }
+            ]
         }
     },
     "properties": {
@@ -96,10 +89,28 @@
             "description": "Variables to be used in the benchmark",
             "patternProperties": {
                 ".*": {
-                    "type": [
-                        "string",
-                        "number",
-                        "boolean"
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "array"
+                        },
+                        {
+                            "$ref": "#/definitions/Problem"
+                        },
+                        {
+                            "$ref": "#/definitions/Client"
+                        },
+                        {
+                            "$ref": "#/definitions/Parameters"
+                        }
                     ]
                 }
             }
@@ -154,7 +165,7 @@
                             ".*": {
                                 "type": "array",
                                 "items": {
-                                    "oneOf": [
+                                    "anyOf": [
                                         {
                                             "type": "string"
                                         },

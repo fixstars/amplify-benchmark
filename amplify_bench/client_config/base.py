@@ -157,4 +157,12 @@ def _set_client_attr(obj, k, v):
             sub_obj = getattr(sub_obj, attr)
         setattr(sub_obj, attrs[-1], v)
 
-    _setattr_recur(obj, k, v)
+    def _setattr_recur_for_dict(obj, k: str, v):
+        if type(v) is dict:
+            sub_obj = getattr(obj, k)
+            for k_, v_ in v.items():
+                _setattr_recur_for_dict(sub_obj, k_, v_)
+        else:
+            _setattr_recur(obj, k, v)
+
+    _setattr_recur_for_dict(obj, k, v)

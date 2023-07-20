@@ -5,12 +5,11 @@ jobs:
       parameters:
         constraint_weight: 1
     client:
-      name: FixstarsClient
-      settings:
-        url: "https://HOGEHOGE"
+      - FixstarsClient
+      - url: "https://HOGEHOGE"
         token: aiueo
-      parameters:
-        timeout: 1000
+        parameters:
+          timeout: 1000
     num_samples: 10
   - problem:
       class: Tsp
@@ -18,12 +17,11 @@ jobs:
       parameters:
         constraint_weight: 1
     client:
-      name: FixstarsClient
-      settings:
-        url: "https://HOGEHOGE"
+      - FixstarsClient
+      - url: "https://HOGEHOGE"
         token: aiueo
-      parameters:
-        timeout: 2000
+        parameters:
+          timeout: 2000
     num_samples: 10
   - problem:
       class: Tsp
@@ -31,10 +29,9 @@ jobs:
       parameters:
         constraint_weight: 2
     client:
-      name: FixstarsClient
-      settings:
-        url: "https://HOGEHOGE"
+      - FixstarsClient
+      - url: "https://HOGEHOGE"
         token: aiueo
-      parameters:
-        timeout: 2000
+        parameters:
+          timeout: 2000
     num_samples: 10

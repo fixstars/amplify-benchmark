@@ -24,12 +24,11 @@ jobs:
         - 10
         - 20
       CLIENT:
-        - name: FixstarsClient
-          settings:
-            url: "https://HOGEHOGE"
+        - - FixstarsClient
+          - url: "https://HOGEHOGE"
             token: $TOKEN
-          parameters:
-            timeout: $TIMEOUTS
-        - name: GurobiClient
-          parameters:
-            timeout: $TIMEOUTS
+            parameters:
+              timeout: $TIMEOUTS
+        - - GurobiClient
+          - parameters:
+              timeout: $TIMEOUTS

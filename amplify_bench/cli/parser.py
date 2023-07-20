@@ -70,9 +70,12 @@ def parse_input_data(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
                 raise ValueError("detect circular reference in input data")
             problem_parameters = d["problem"]["parameters"] if "parameters" in d["problem"].keys() else {}
             problem_list.append(gen_problem(d["problem"]["class"], d["problem"]["instance"], **problem_parameters))
-            client_settings = d["client"]["settings"] if "settings" in d["client"].keys() else {}
-            client_parameters = d["client"]["parameters"] if "parameters" in d["client"].keys() else {}
-            client_list.append(get_client_config(client_settings, client_parameters, d["client"]["name"]))
+            client_parameters = {}
+            client_settings = copy.deepcopy(d["client"][1])
+            if "parameters" in client_settings.keys():
+                client_parameters = copy.deepcopy(client_settings["parameters"])
+                del client_settings["parameters"]
+            client_list.append(get_client_config(client_settings, client_parameters, d["client"][0]))
             num_samples_list.append(d["num_samples"])
         ret.extend(list(zip(problem_list, client_list, num_samples_list)))
 
