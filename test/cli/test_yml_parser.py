@@ -103,6 +103,12 @@ def test_yml_parser():
     with pytest.raises(jsonschema.exceptions.ValidationError) as e:
         parse_input_data(Path(__file__).parent / ".." / "data" / "error_invalid_without_numsample.yml")
 
+    with pytest.raises(jsonschema.exceptions.ValidationError) as e:
+        parse_input_data(Path(__file__).parent / ".." / "data" / "error_invalid_client.yml")
+
+    with pytest.raises(jsonschema.exceptions.ValidationError) as e:
+        parse_input_data(Path(__file__).parent / ".." / "data" / "error_invalid_client_variable.yml")
+
     # test KeyError
     with pytest.raises(KeyError) as _:
         parse_input_data(Path(__file__).parent / ".." / "data" / "error_ref.yml")

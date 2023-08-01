@@ -1,0 +1,17 @@
+variables:
+  NUM_SAMPLES: 20
+  FIXSTARS:
+    - FixstarsClient
+    - url: "https://HOGEHOGE"
+    - parameters:
+        timeout: $TIMEOUT
+jobs:
+  - problem:
+      class: Tsp
+      instance: eil51
+    client: $FIXSTARS
+    matrix:
+      TIMEOUT:
+        - 1000
+        - 2000
+    num_samples: 10

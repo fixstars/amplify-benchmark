@@ -1,0 +1,10 @@
+jobs:
+  - problem:
+      class: Tsp
+      instance: eil51
+    client:
+      - FixstarsClient
+      - url: "https://HOGEHOGE"
+      - parameters:
+          timeout: 10
+    num_samples: 10

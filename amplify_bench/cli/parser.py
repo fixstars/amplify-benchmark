@@ -68,6 +68,7 @@ def parse_input_data(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
                 d = replace_recursive(d, variables)
             except RecursionError:
                 raise ValueError("detect circular reference in input data")
+            _validation({"jobs": [d]})
             problem_parameters = d["problem"]["parameters"] if "parameters" in d["problem"].keys() else {}
             problem_list.append(gen_problem(d["problem"]["class"], d["problem"]["instance"], **problem_parameters))
             client_parameters = {}
