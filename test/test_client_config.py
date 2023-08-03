@@ -174,7 +174,7 @@ def test_nec_client_config():
 
 def test_client_config():
     client_config_data = get_client_config({"token": "xxx"}, {"timeout": 1000}, name := "FixstarsClient")
-    assert type(client_config_data) == FixstarsClientConfig
+    assert isinstance(client_config_data, FixstarsClientConfig)
 
     client_config_data = get_client_config(
         settings := {"token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"},

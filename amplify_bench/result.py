@@ -148,9 +148,9 @@ class BenchmarkResult:
     def __post_init__(self):
         if self.__len__() == 0:
             return
-        elif type(self.job_results[0]) == JobResult:
+        elif isinstance(self.job_results[0], JobResult):
             pass
-        elif type(self.job_results[0]) == dict:
+        elif isinstance(self.job_results[0], dict):
             self.job_results = [JobResult(**asdict(job_result)) for job_result in self.job_results]
         else:
             raise RuntimeError(f"type of job_results error. type:{type(self.job_results[0])}")
