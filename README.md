@@ -6,9 +6,9 @@
 
 ## What is Amplify Benchmark?
 
-Fixstars Amplify Benchmark is a framework for benchmarking the performances of solver for quadratic programming problem (QUBO). It provides a command line interface to perform benchmarking and a definition of the benchmark problem.
+Fixstars Amplify Benchmark is a framework for benchmarking the performances of solvers for quadratic unconstrained binary optimization problems (QUBO). It provides a command line interface to perform benchmarking and a definition of the benchmark problem.
 
-The [Fixstars Amplify SDK](https://amplify.fixstars.com/sdk) is used as the backend, allowing benchmarks to be run with many solvers such as quantum annealing machines, Ising machines, and mathematical optimization solvers. Benchmarks are run based on a job set file that defines the target problems, the number of runs, and the solvers to be used, making it easy to automate the process from benchmark execution to anlyzing results.
+The [Fixstars Amplify SDK](https://amplify.fixstars.com/sdk) is used as the backend, allowing benchmarks to be run with many solvers such as quantum annealing machines, Ising machines, and mathematical optimization solvers. Benchmarks are run based on a job set file that defines the target problems, the number of runs, and the solvers to be used, making it easy to automate the process from benchmark execution to analyzing results.
 
 The results of this library run can be loaded into the [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer) to visualize the results in a web browser. A demo of the benchmark results for Amplify AE is [here](https://amplify.fixstars.com/benchmark/).
 
@@ -97,7 +97,7 @@ jobs:
     num_samples: 2
 ```
 
-The benchmark job set file contains a list of benchmark jobs in YAML or JSON file format. The jobs consist of the number of runs, a list of problems to solve, and parameter values pass to the [Client class](https://amplify.fixstars.com/docs/client.html) to run. In the case of this job set, it consists of the following benchmark jobs:
+The benchmark job set file contains a list of benchmark jobs in YAML or JSON file format. The jobs consist of the number of runs, a list of problems to solve, and parameter values passed to the [Client class](https://amplify.fixstars.com/docs/client.html) to run. For this job set, it consists of the following benchmark jobs:
 
 * target problem:
   * `TSPLIB`: `eil51` instance
@@ -134,7 +134,7 @@ When execution completes a JSON file is output as the result of the execution in
 
 ### Open the result with Amplify Benchmark Viewer
 
-The results can be visualized using the [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer). To analyze for the viewer, give the `stas` subcommand with the path to a directory or a result file to the `amplify-bench` command.
+The results can be visualized using the [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer). To analyze for the viewer, give the `stats` subcommand with the path to a directory or a result file to the `amplify-bench` command.
 
 ```bash
 $ amplify-bench stats preset_20230803_223440.json
@@ -158,7 +158,7 @@ Then, drag and drop the created `report/data.json` file into the Amplify Benchma
 
 #### `PresetObject`
 
-A job set file consisted with JSON objects with the following keys. The schema of the job set file is described in [`amplify_bench/cli/schemas`](amplify_bench/cli/schemas).
+A job set file consisted of JSON objects with the following keys. The schema of the job set file is described in [`amplify_bench/cli/schemas`](amplify_bench/cli/schemas).
 
 | key         | type               | description                                        |
 | ----------- | ------------------ | -------------------------------------------------- |
@@ -232,7 +232,7 @@ The `problem` key has an object consisting of the following keys:
 | `insrance`   | `string` | Instance name                               |
 | `parameters` | `object` | Constructor parameters of the problem class |
 
-The `class` is the name of the problem class contained in [`amplify_bench/problem`](https://github.com/fixstars/amplify-benchmark/tree/main/amplify_bench/problem) The `class` is a class name. The predefined problem classes are `Tsp` (TSPLIB), `Qap` (QAPLIB), `Cvrp` (CVRPLIB), `MaxCut` (GSET), `Sudoku` and `Qplib` (QPLIB). The `instance` is the name of the instance in the problem set corresponding to each problem class. See [`amplify_bench/problem/data`](amplify_bench/problem/data) for details. Problem classes may have formulation parameters that can be passed to the constructor, which can be specified by `parameter` key.
+The `class` is the name of the problem class contained in [`amplify_bench/problem`](https://github.com/fixstars/amplify-benchmark/tree/main/amplify_bench/problem). The predefined problem classes are `Tsp` (TSPLIB), `Qap` (QAPLIB), `Cvrp` (CVRPLIB), `MaxCut` (GSET), `Sudoku` and `Qplib` (QPLIB). The `instance` is the name of the instance in the problem set corresponding to each problem class. See [`amplify_bench/problem/data`](amplify_bench/problem/data) for details. Problem classes may have formulation parameters that can be passed to the constructor, which can be specified by `parameter` key.
 
 #### Using a matrix for your jobs
 
