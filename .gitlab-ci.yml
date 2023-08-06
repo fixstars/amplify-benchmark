@@ -1,35 +1,34 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
+      when: never
+    - if: "$CI_COMMIT_BRANCH || $CI_COMMIT_TAG"
+
 stages:
+  - test-release
+  - test
+  - release
   - scan
-  - push
+  - sync
 
-python-src-format:
-  stage: scan
+upload test-pypi:
+  stage: test-release
   tags:
     - docker
   image: python:3.8
   script:
+    - git clean -xfd
     - pip install pipenv
-    - pipenv install --dev --skip-lock
-    - pipenv run black --check amplify_bench/ && pipenv run isort --check amplify_bench/
-    - pipenv run black --check test/ && pipenv run isort --check test/
+    - pipenv --rm || true
+    - pipenv install --dev --skip-lock --python 3.8
+    - pipenv run python -m build --wheel
+    - pipenv run twine upload --skip-existing --username $TESTPYPI_USERNAME --password $TESTPYPI_PASSWORD --repository testpypi dist/*
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-python-src-lint:
-  stage: scan
-  tags:
-    - docker
-  image: python:3.8
-  script:
-    - pip install pipenv
-    - pipenv install --dev --skip-lock
-    - pipenv run flake8 amplify_bench/ && pipenv run mypy amplify_bench/
-    - pipenv run flake8 test/ && pipenv run mypy --explicit-package-bases test/
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_TAG =~ /^v\d+.\d+.\d+/'
 
 python-test:
-  stage: scan
+  stage: test
   tags:
     - docker
   image: python:3.8
@@ -40,15 +39,16 @@ python-test:
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
-      coverage_report: 
+      coverage_report:
         coverage_format: cobertura
         path: coverage.xml
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-
-python-test-slow:
-  stage: scan
+python-test-full:
+  stage: test
   tags:
     - docker
   image: python:3.8
@@ -59,37 +59,59 @@ python-test-slow:
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
-      coverage_report: 
+      coverage_report:
         coverage_format: cobertura
         path: coverage.xml
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
-sync-repositories:
-  stage: push
+upload pypi:
+  stage: release
   tags:
     - docker
-  image: bitnami/git
+  image: python:3.8
   script:
-    # prepare remote repositories
-    - git remote set-url origin https://gitlab-ci-token:$GITLAB_TOKEN@${CI_REPOSITORY_URL##*@}
-    - git config remote.github.url >&- && git remote set-url github https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/fixstars/amplify-benchmark-test.git || git remote add github https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/fixstars/amplify-benchmark-test.git
-    - git config user.email "noreply@fixstars.com"
-    - git config user.name "GitLab Bot"
-    - git fetch github main
-    - git fetch origin main develop
-    - git switch develop
-    - git reset --hard origin/develop
     - git clean -xfd
-    # rebase and push
-    - git status
-    - git rebase github/main
-    - git push origin develop
-    - git push origin develop:main
-    - git push github develop:main
+    - pip install pipenv
+    - pipenv --rm || true
+    - pipenv install --dev --skip-lock --python 3.8
+    - pipenv run python -m build --wheel
+    - pipenv run twine upload --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_TAG =~ /^v\d+.\d+.\d+/'
+      when: manual
+
+check-formatter:
+  stage: scan
+  tags:
+    - docker
+  image: python:3.8
+  script:
+    - pip install pipenv
+    - pipenv install --dev --skip-lock
+    - pipenv run black --check amplify_bench/ && pipenv run isort --check amplify_bench/
+    - pipenv run black --check test/ && pipenv run isort --check test/
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+
+check-linter:
+  stage: scan
+  tags:
+    - docker
+  image: python:3.8
+  script:
+    - pip install pipenv
+    - pipenv install --dev --skip-lock
+    - pipenv run flake8 amplify_bench/ && pipenv run mypy amplify_bench/
+    - pipenv run flake8 test/ && pipenv run mypy --explicit-package-bases test/
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
 
 check-license:
   stage: scan
@@ -112,6 +134,33 @@ check-license:
 
         exit 1
       fi
-  only:
-    refs:
-      - merge_requests
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+
+sync-repositories:
+  stage: sync
+  tags:
+    - docker
+  image: bitnami/git
+  script:
+    # prepare remote repositories
+    - git remote set-url origin https://gitlab-ci-token:$GITLAB_TOKEN@${CI_REPOSITORY_URL##*@}
+    - git config remote.github.url >&- && git remote set-url github https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/fixstars/amplify-benchmark-test.git || git remote add github https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/fixstars/amplify-benchmark-test.git
+    - git config user.email "noreply@fixstars.com"
+    - git config user.name "GitLab Bot"
+    - git fetch github main
+    - git fetch origin main develop
+    - git switch develop
+    - git switch -C develop origin/develop
+    - git clean -xfd
+    # rebase and push
+    - git status
+    - git rebase github/main
+    - git push origin develop
+    - git push origin develop:main
+    - git push github develop:main
+    - git push --follow-tags github
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_TAG =~ /^v\d+.\d+.\d+/'

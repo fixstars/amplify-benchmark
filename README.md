@@ -1,1 +1,1 @@
-# amplify-benchmark
+# Amplify Benchmark
