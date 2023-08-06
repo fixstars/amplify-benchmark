@@ -2,70 +2,70 @@
 
 [![Fixstars](https://img.shields.io/badge/-Fixstars-333333.svg?logo=data:image/png;base64,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&style=popout-square)](https://www.fixstars.com/)
 [![Fixstars Amplify](https://img.shields.io/badge/-Fixstars%20Amplify-333333.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAg4SURBVHhe7ZtpbFVFFMfnlsoSUVsKLpQIFgxENIpgWKoBao1LIHlIiMgHTOQDGg2CCaLSpwSqwQXBDY1BwKWPRRRQUISySh+obG5QFQouBRcoaFyx9Pr/35lbH+/dZe5b+sD0l5w350zLS+fcuWfOzBxEM81khyOFXfOUmlVyVNukYPAd0NSivUn2ZI+sOMBoZR5G8xNkJZxwh9WZJbLigHY1NSaaN6UlXoATHlZ6k5MVB0jMl5VCpsAJEaU3KYZqm5y6wi4tTNFiL9Qussdie0OD6N/h0L5/lJ1xsjYD2tUeOIFmmbQa6Z2TIw4cKSwqVHbGaVIH1K/Ka31iVf44yGTVZceBWDpiYn6BV+IqZWeUJnMABj3IEEYV1Kch+ewzhfkxmm+px3EOZAuccK00M0fGHYCB50NmQl0FudLqFOJdfrSvrfkbTfxrYNMCUgknjJJmZsiYAzDotpBJUGsg4yGt2A+qW9xwdJ3SyXuqdaMCTuD3ZISMOIDTHc1myHRIfMq7WLU2myAHperKdDhhSV1RUdpXrbQ6oH5VfmcMfgHU9ZDLrc5ETpryBbX7/kCzXFqeDDf/NrYcLixK6x4iLQ6ofy//HL7neDyfwBwpex2pMepN/k4876vWj74IpJuPdOzaU9kpk5IDGlbk5XC6G4bYAJPvOaO3F8tzhhxrUHosGyF/StWXnkjf1uCVuETZKZG0AzDwy8xcYyHU1ZArrE5/rOgfD16DY2i4SuhyAaQKTugnzeQJ7AAMPA8yFSqD1wjIGezXgLu/qFQdYewIAmPBRjhhrDSTQ9sB9e/ntcTAh0LdAQlDggajZVj+GPDcWAMJugdoCXkRTnhEmsHRcgAG3tswjSVQGa0vsjqDs1S1jqjXYKW0AvMgnMDXMTCeDsDACyDPQ10L4dNPdh2uM72nv01Sg1DcAicwmAbCdUAY+HVo5kAutDpSYyGm/61KdwXLWxv8Rb9DTSXh2Yp/XVrw/T5+jy8JMwAD7wVhqsrono7BE63DjoKD+7gUpjILSD/ssrYiYeqmbGfC0Vw2jQ7AoBnduWn5ADLY6kwPfLf5nbowGKbKpUiYduGVKFb2yYSjA/C5A+1Yw1yTbzScELej4wmItU1NM09i+k9Uui91nbrlmqaVLaYl0QEjEWAXWdqkbYZoeXwKtHGQXMyU7gafPAwGDy4p6eQ3SIVpmLNzrz92XHbpcaRjUb4wjMeg9odYUzUFquGAYXjaBdDnQ4ZYvUK8JaYNGJ723dUpSThais/XIOdbtmQQHLDx/+2AcFVbLCjl0DjlY8e6CYMfSMU1D5iwvrSPUk9PyqLdMWauPvdA4h80kzoLxxkwfl1pa+zwDkHdi0AxdGZJ5Q/yJ6cBk6tyRI7BY7RnIE5BvQ7SFTOAq5PzDJhVUvkXGp7Z94GLqjEbfJOYU4JwNA+Dfwkag53bijbDHjzxSoW52yPc40fgBH7pqUs4yhVjG2QMhAeqTvwiTPOkpMw1CGLAXC7ekVYj30BunDm4co80TwHKomdhFMxjuL777VBn4+nfpXQLrxnAQ814OkN2wzkPSTPLlEV7YPCcmbMgOttzLoUn4bkMYqD70cTe3cWyFNNp5MyStYGSnLQRjjJdfx3S0bL9+RBPP+EEyWsGEMcjLMUwZGufw0klym4ayqraYPBPQeOeQXfwhNv6BPwcsEu1blwMWQsnPCDNDFMW7QqnV0KbAHELdE58jbku9wNxeDvAtPYIOjwKJzjFjPQRjvbGIHiXyJ1cUF4RUwc4vqqeDjDlxeWP0vKlGE64U+mZgLdMyexWecbwqlQT8XSASoiqpaVFD9VmgmRT8wUIft8pPQG/GEC2q1YHvzu+VGAKmwyxpTgJ6DiAtz66xCdO6eQN1QZhC56+52GsjgN0j7N2IUPcrfRM8KJqg+C49MXi6wAMihuHA9LyJJNPX4jjLZmG6/wdNkjiTM+7CKIzA4hXQmTjVumRHh7rE1tbqMN8Ma3Y6ybKQtcBW1TrBqc/r8wyi2nOVZofnLXPStUbXQesUK0buvf7kopQGxEJdYbYZTOaNHyJD53XYB6C31Gle6LlABUHeLvrhp+D/iMSGoiMjtViHMhfsKeLhcP00trya5xqC+Nh/UHCrs8N3RlAYgubYvkMDvJPgyvwtCMhHlDygrWX1SeZJBrM7fiZbo3B26p1YwWe/k6l+xLEAW5f6n+TEwm1x1PnSQwLJJ2qSFhPtBO/d680PTBNrutOtYU2gZbLIA5we8reV9qRELfLX0FutmxvZuD3N2C28P8TOFNe7FVbeAAOCpK46TvANK2qzvj6nmpMf+dXIxLKg9gFkkE2MYwRNfi3vJ12w622cB4cpFtrZKHtgFkla1m9EZ8VOqenkRDrfFkqx8Ip3RKaWNpCVuN7HpdmPCYPbGul3ggDNY/CAxHkFSAfqdYmMfuLhO7GJ+OCblDzYiK+bxvkbGVLZIITn5zxrq/xuFuXoA7gsbPNQdMUnyqdA8+HsNCJCYhfuVwQekMO4rtvk2YjsUtvPcRz1+dGUAewaMJm0aySSgYkGxZOeRVJpsKZkPlwwhyxeIR9kMvXgDfQZKXfrs+NQA5QCdHP0oqbgqOWcQk7D8Ijq2GQ0ZD7Iaw74OktozMzOfuPToYxov6f/XBELzXd7Qx0nmoD43ks7sSE9aU8XByMVaELAqPvZsORSIi1CFzqWHHWHsK7e7bnQjpB6Ej+rxFKG0g83BiNFnvu4/3lc1ii+iL6/2r9JCDJOIA3RldjNvDpZp5IqDU+WRlKZzEY0lG0azHr5oqyaGtRPoBHd80000wzARHiX+svQrVLbT89AAAAAElFTkSuQmCC&style=popout-square)](https://amplify.fixstars.com/)
-[![README-ja.md](https://img.shields.io/badge/JA-README.md-blue)](README-ja.md)
+[![README.md](https://img.shields.io/badge/EN-README.md-blue)](README.md)
 
-## What is Amplify Benchmark?
+## Amplify Benchmark とは？
 
-Fixstars Amplify Benchmark is a framework for benchmarking the performances of solver for quadratic programming problem (QUBO). It provides a command line interface to perform benchmarking and a definition of the benchmark problem.
+Fixstars Amplify Benchmark は二次計画問題 (QUBO) の求解性能のベンチマークを行うフレームワークです。ベンチマークの実行を担うコマンドラインインターフェースとベンチマーク問題の定義を提供します。
 
-The [Fixstars Amplify SDK](https://amplify.fixstars.com/sdk) is used as the backend, allowing benchmarks to be run with many solvers such as quantum annealing machines, Ising machines, and mathematical optimization solvers. Benchmarks are run based on a job set file that defines the target problems, the number of runs, and the solvers to be used, making it easy to automate the process from benchmark execution to anlyzing results.
+バックエンドに [Fixstars Amplify SDK](https://amplify.fixstars.com/sdk) が用いられているため、量子アニーリングマシン、イジングマシン、数理最適化ソルバー等、数多くのソルバーを用いてベンチマークを実行することが可能です。ベンチマークは、対象の問題とその実行回数、使用するソルバーを指定したジョブが定義されるジョブセットファイルに基づいて実行されるため、実行から結果の取得までを自動で容易に行うことが出来ます。
 
-The results of this library run can be loaded into the [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer) to visualize the results in a web browser. A demo of the benchmark results for Amplify AE is [here](https://amplify.fixstars.com/benchmark/).
+このライブラリの実行結果を [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer) で読み込むことで、結果を WEB ブラウザ上で可視化することが出来ます。Amplify AE を対象としたベンチマーク結果のデモは[こちら](https://amplify.fixstars.com/benchmark/)です。
 
-### Features
+### 特徴
 
-* Easy to run
-* Parallel execution
-* Automatic evaluation and analysis
-* Benchmark result viewer is provided
-* Customizable solver and problem parameters
-* Formulations for several benchmark sets are pre-defined
-* User-define problems can be added
+* 実行が容易
+* 並列実行
+* 自動評価と解析
+* ベンチマーク結果ビューアを提供
+* カスタマイズ可能なソルバーと問題パラメータ
+* 複数のベンチマークセットに対する定式化が定義済み
+* ユーザ定義問題を追加可能
 
-Pre-defined benchmark sets:
+### 事前定義済みベンチマークセット
 
-* Traveling Salesperson Problem: [TSPLIB](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/)
-* Quadratic Assignment Problem: [QAPLIB](https://coral.ise.lehigh.edu/data-sets/qaplib/)
-* Max-CUT Problem: [Gset](https://web.stanford.edu/~yyye/yyye/Gset/)
-* Capacitated Vehicle Routing Problem: [CVRPLIB](http://vrp.galgos.inf.puc-rio.br/index.php/en/)
-* Quadratic Problem: [QPLIB](https://qplib.zib.de/)
+* 巡回セールスマン問題: [TSPLIB](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/)
+* 二次割当問題: [QAPLIB](https://coral.ise.lehigh.edu/data-sets/qaplib/)
+* 最大カット問題: [Gset](https://web.stanford.edu/~yyye/yyye/Gset/)
+* 容量制約付き配車ルート問題: [CVRPLIB](http://vrp.galgos.inf.puc-rio.br/index.php/en/)
+* 二次計画問題: [QPLIB](https://qplib.zib.de/)
 
-Supported solvers powered by Amplify SDK:
+Amplify SDK により対応するソルバー:
 
 * [Fixstars Amplify AE](https://amplify.fixstars.com/)
 * [D-Wave Advantage](https://www.dwavesys.com/solutions-and-products/systems/)
 * [Fujitsu Digital Annealer 3/4](https://www.fujitsu.com/global/services/business-services/digital-annealer/)
 * [Toshiba SQBM+](https://www.global.toshiba/ww/products-solutions/ai-iot/sbm.html)
 * [Gurobi Optimizer](https://www.gurobi.com/solutions/gurobi-optimizer/)
-* (See [supported solvers of Amplify SDK](https://amplify.fixstars.com/docs/client.html))
+* ([その他 Amplify SDK が対応するクライアント](https://amplify.fixstars.com/docs/client.html))
 
 ## Gallery
 
-|              Objective value for execution time              | Time To Solution (TTS)                                          |
-| :----------------------------------------------------------: | --------------------------------------------------------------- |
+|              Objective value for execution time              |                     Time To Solution (TTS)                      |
+| :----------------------------------------------------------: | :-------------------------------------------------------------: |
 | <img src="docs/screenshots/target_energy.png" width="600px"> | <img src="docs/screenshots/time_to_solution.png" width="600px"> |
 
-| Probability of obtaining a feasible solution                 | Probability of obtaining the best solution Rate                |
-| ------------------------------------------------------------ | -------------------------------------------------------------- |
+|         Probability of obtaining a feasible solution         |        Probability of obtaining the best solution Rate         |
+| :----------------------------------------------------------: | :------------------------------------------------------------: |
 | <img src="docs/screenshots/feasible_rate.png" width="600px"> | <img src="docs/screenshots/reach_best_rate.png" width="600px"> |
 
-| Table DATA                                            |
-| ----------------------------------------------------- |
+|                      Table DATA                       |
+| :---------------------------------------------------: |
 | <img src="docs/screenshots/table.png" width="1225px"> |
 
-## Getting started
+## 始め方
 
-### Installation
+### インストール
 
-Amplify benchmark is provided as a Python (>=3.8) library. It can be installed with pip as follows:
+Amplify benchmark は Python (>=3.8) ライブラリとして提供されています。次のようにして pip でインストール出来ます。
 
 ```bash
 $ pip install amplify-bench
 ```
 
-### Run example job set
+### サンプルセットの実行
 
-After installation, the `amplify-bench` command is enabled.
+インストール後、`amplify-bench` コマンドが有効になります。
 
 ```bash
 $ amplify-bench --help
@@ -80,9 +80,9 @@ Commands:
   stats     Generate QUBO benchmark stats data.
 ```
 
-To run a benchmark, you have to create a benchmark definition ("job set") file. The `example/benchmark.yml` file contains a sample job set file.
+ベンチマークを実行するためには、ベンチマーク定義 (以下、ジョブセット) ファイルを作成する必要があります。[`example/benchmark.yml`](example/benchmark.yml) ファイルはジョブセットファイルの例が記述されています。
 
-`example/benchmark.yml`
+[`example/benchmark.yml`](example/benchmark.yml)
 
 ```yaml
 jobs:
@@ -97,19 +97,19 @@ jobs:
     num_samples: 2
 ```
 
-The benchmark job set file contains a list of benchmark jobs in YAML or JSON file format. The jobs consist of the number of runs, a list of problems to solve, and parameter values pass to the [Client class](https://amplify.fixstars.com/docs/client.html) to run. In the case of this job set, it consists of the following benchmark jobs:
+ベンチマークジョブセットファイルには YAML あるいは JSON ファイル形式でベンチマークジョブのリストを記述します。ジョブは実行回数、ベンチマーク対象の問題リスト、実行する [Client クラス](https://amplify.fixstars.com/docs/client.html) に与える設定値で構成されています。このジョブセットの場合、次のベンチマークジョブで構成されます。
 
-* target problem:
+* 対象の問題
   * `TSPLIB`: `eil51` instance
-* number of runs: 2
-* [`FixstarsClient`](https://amplify.fixstars.com/docs/client.html#fixstars)
+* 実行回数: 2
+* 実行するクライアント: [`FixstarsClient`](https://amplify.fixstars.com/docs/client.html#fixstars)
   * `token`: INPUT_API_TOKEN
   * `parameter.timeout`: 3000
 
-Now to start the benchmark using this job set file, run the `amplify-bench` command with the `run` subcommand with the path to the job set file.
+それでは、このジョブセットファイルを用いてベンチマークを実行してみましょう。`amplify-bench` コマンドの `run` サブコマンドにジョブセットファイルのパス与えて実行します。
 
 > **Note**
-> Replace `INPUT_API_TOKEN` with your API token. If you do not have an API token, go to [Amplify WEB site](https://amplify.fixstars.com/) and [create an account](https://amplify.fixstars.com/ja/register).
+> `INPUT_API_TOKEN` を自身の API トークンで置き換えてください。トークンを未入手の場合は、[Amplify WEBサイト](https://amplify.fixstars.com/) にアクセスし、[アカウントを作成](https://amplify.fixstars.com/ja/register)してください。
 
 
 ```bash
@@ -130,42 +130,42 @@ error jobs:  0
 Jobs not yet started:  0
 ```
 
-When execution completes a JSON file is output as the result of the execution in the same directory. The file name is appended with the execution time by default. The output file path can be changed with the `--output <path>` option.
+実行が完了すると、デフォルトでは入力ファイルと同じディレクトリに実行結果として JSON ファイルが出力されます。ファイル名には実行時刻が付与されます。出力ファイルパスは `--output <path>` オプションで変更が可能です。
 
-### Open the result with Amplify Benchmark Viewer
+### Amplify Benchmark Viewer を用いた結果の可視化
 
-The results can be visualized using the [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer). To analyze for the viewer, give the `stas` subcommand with the path to a directory or a result file to the `amplify-bench` command.
+実行結果は [Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer) で可視化することが出来ます。[Amplify Benchmark Viewer](https://github.com/fixstars/amplify-benchmark-viewer) で読み込むには `stas` サブコマンドに実行結果のファイル、あるいはディレクトリを与えて解析します。
 
 ```bash
 $ amplify-bench stats preset_20230803_223440.json
 ```
 
-By default, a `report/data.json` file is created in the current directory. The path directory of the output file can be changed with the `--output` option.
+デフォルトではカレントディレクトリに `report/data.json` ファイルが作成されます。出力ファイルのパス・ディレクトリは `--output` オプションで変更が可能です。
 
-Then, drag and drop the created `report/data.json` file into the Amplify Benchmark Viewer [GitHub pages](https://fixstars.github.io/amplify-benchmark-viewer/) to visualize the results.
+作成した `report/data.json` ファイルを Amplify Benchmark Viewer の [GitHub pages](https://fixstars.github.io/amplify-benchmark-viewer/) にドラッグ&ドロップすることで、結果を可視化出来ます。
 
 > **Note**
-> The data is analyzed only on the browser and is not stored on the external server.
+> データはブラウザ上で展開され、サーバには保存されません。
 
 | Drag and Drop `data.json` file                        | Show the evaluated problem list                             | The detailed evaluation for each problem               |
 | ----------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------ |
 | <img src="docs/screenshots/upload.png" width="600px"> | <img src="docs/screenshots/problem_list.png" width="600px"> | <img src="docs/screenshots/problem.png" width="600px"> |
 
 
-## Advanced usage
+## 高度な使い方
 
-### job set file in details
+### ジョブセットファイルの書き方
 
-#### `PresetObject`
+#### `JobsetObject`
 
-A job set file consisted with JSON objects with the following keys. The schema of the job set file is described in [`amplify_bench/cli/schemas`](amplify_bench/cli/schemas).
+ジョブセットファイルには下記のキーを持つ JSON オブジェクトを記述します。ジョブセットファイルのスキーマは [`amplify_bench/cli/schemas`](amplify_bench/cli/schemas) に記述されています。
 
-| key         | type               | description                                        |
-| ----------- | ------------------ | -------------------------------------------------- |
-| `jobs`      | `array[JobObject]` | list of benchmark jobs                             |
-| `variables` | `object`           | definitions of variables used in `jobs` (Optional) |
+| key         | type               | description                             |
+| ----------- | ------------------ | --------------------------------------- |
+| `jobs`      | `array[JobObject]` | ベンチマークジョブのリスト              |
+| `variables` | `object`           | ジョブで使用可能な変数の定義 (Optional) |
 
-Variable definitions for the `variables` key can be referenced in `jobs`. A string starting with `$` is treated as a variable name. This is useful, for example, to specify a setting that is commonly used in multiple jobs
+`variables` キーに与える変数定義は `jobs` 内で参照することが出来ます。この時、`$` から始まる文字列は変数名として扱われます。例えば次のように全ての問題に共通する設定を与えるときに有用です。
 
 ```yaml
 variables:
@@ -188,16 +188,16 @@ jobs:
 
 #### `JobObject`
 
-| key           | type            | description                                     |
-| ------------- | --------------- | ----------------------------------------------- |
-| `num_samples` | `int`           | the number of runs                              |
-| `client`      | `array`         | client name and parameters                      |
-| `problem`     | `ProblemObject` | te problem                                      |
-| `matrix`      | `object[array]` | the definitions of variable patterns (Optional) |
+| key           | type            | description                           |
+| ------------- | --------------- | ------------------------------------- |
+| `num_samples` | `int`           | 実行回数                              |
+| `client`      | `array`         | クライアントの設定                    |
+| `problem`     | `ProblemObject` | 問題設定                              |
+| `matrix`      | `object[array]` | 変数の組合わせパターン定義 (Optional) |
 
-If `num_samples` is an integer greater than 1, it will be run multiple times with the same settings. The `matrix` key is given with the patterns of variables explained later.
+`num_samples` に 1 より大きな整数値を入れると同じ設定で複数回実行します。`matrix` キーには後述する変数の組合わせパターンを設定します。
 
-The `client` key is given an array of length 2. The first element of the array is the name of the client class, and the second element is an object with the property values of the client. For example, the following client configuration in the Amplify SDK
+`client` キーには長さ2の配列を与えます。第一要素にクライアントクラス名を指定し、第二要素にはクライアントクラスのプロパティ値をオブジェクトで与えます。例えば、次の Amplify SDK におけるクライアント設定に対して、
 
 ```python
 from amplify.client import FixstarsClient
@@ -207,7 +207,7 @@ client.token = "INPUT_API_TOKEN"
 client.parameters.timeout = 1000
 ```
 
-should be specified as follows in the job set file.
+以下のようにジョブセットファイルに記述します。
 
 ```yaml
 jobs:
@@ -226,17 +226,17 @@ jobs:
 
 `problem` キーには以下のキーで構成されるオブジェクトを与えます。
 
-| key          | type     | description                                 |
-| ------------ | -------- | ------------------------------------------- |
-| `class`      | `string` | The name of the problem class               |
-| `insrance`   | `string` | Instance name                               |
-| `parameters` | `object` | Constructor parameters of the problem class |
+| key          | type     | description      |
+| ------------ | -------- | ---------------- |
+| `class`      | `string` | 問題クラス名     |
+| `insrance`   | `string` | インスタンス名   |
+| `parameters` | `object` | 定式化パラメータ |
 
-The `class` is the name of the problem class contained in [`amplify_bench/problem`](https://github.com/fixstars/amplify-benchmark/tree/main/amplify_bench/problem) The `class` is a class name. The predefined problem classes are `Tsp` (TSPLIB), `Qap` (QAPLIB), `Cvrp` (CVRPLIB), `MaxCut` (GSET), `Sudoku` and `Qplib` (QPLIB). The `instance` is the name of the instance in the problem set corresponding to each problem class. See [`amplify_bench/problem/data`](amplify_bench/problem/data) for details. Problem classes may have formulation parameters that can be passed to the constructor, which can be specified by `parameter` key.
+`class` には [`amplify_bench/problem`](amplify_bench/problem) に含まれる問題クラス名を指定します。フレームワークにで事前に定義されている問題クラスは、`Tsp` (TSPLIB), `Qap` (QAPLIB), `Cvrp` (CVRPLIB), `MaxCut` (GSET), `Sudoku`, `Qplib` (QPLIB) です。`instance` にはそれぞれの問題クラスに対応する問題セットに含まれるインスタンス名を記述します。詳細は [`amplify_bench/problem/data`](amplify_bench/problem/data) を参照してください。問題クラスにはコンストラクタに与える定式化のパラメータを指定出来ることがあり、`parameter` で指定します。
 
-#### Using a matrix for your jobs
+#### マトリックス変数を用いた自動ジョブ生成
 
-Multiple jobs can be automatically generated for all combinations of multiple variable patterns given in a single job definition. For example, to run for all combinations of multiple instances and multiple runtimes, the following job set file can be used.
+一つのジョブ定義に与えた複数の変数パターンの全ての組合わせに対して複数のジョブを自動的に生成することが出来ます。例えば、複数のインスタンスと複数の実行時間にする全ての組合わせに対して実行する場合、次のように記述します。
 
 ```yaml
 variables:
@@ -261,27 +261,27 @@ jobs:
         - 30000
 ```
 
-The `matrix` is an array of values with the variable names as keys. In this case, jobs with `timeout` of `10000` and `30000` will be created for `esc32a` and `sko56` respectively. Note that you can refer to the variables you pass to `matrix` in the variables defined in `variables`.
+`matrix` には変数名をキーにして、値を配列で与えます。この場合、`esc32a` と `sko56` それぞれに対して、`timeout` が `10000` と `30000` のジョブが生成されます。`variables` に定義されている変数の中で `matrix` に与えている変数を参照できることに注意してください。
 
 
 > **Note**
-> Variables are referenced recursively, but an infinite loop will fail.
+> 変数の参照は再帰的に行われますが、無限ループが発生するとエラーになります。
 
-### Create your own benchmark problems
+### ユーザ定義問題の追加
 
-User-defined formulations can be added as benchmark problems that are recognized in Amplify Benchmark by placing a Python file under [`amplify_bench/problem`](amplify_bench/problem) containing the problem class formulated using the Amplify SDK.
+ベンチマーク問題としてユーザが定義した定式化を追加することが出来ます。Amplify SDK を用いて定式化した問題クラスを `amplify_bench/problem` 以下に Python ファイルとして配置することで、Amplify Benchmark から認識されます。
 
-First, clone the repository to add the Python files to Amplify Benchmark.
+まず、Amplify Benchmark に Python ファイルを追加するためにリポジトリをクローンします。
 
 ```bash
 $ git clone https://github.com/fixstars/amplify-benchmark.git
 ```
 
-First, place any Python file under [`amplify_bench/problem`](amplify_bench/problem). The file name must be the same as the problem class name and must be in lowercase. For example, to add a `Xyz` problem class, the file name should be `amplify_bench/problem/xyz.py`.
+最初に `amplify_bench/problem` 以下に、任意の Python ファイルを配置します。ファイル名は問題クラス名と同じで小文字にする必要があります。例えば、`Xyz` 問題を追加する場合、`amplify_bench/problem/xyz.py` というファイル名にします。
 
-The problem class must extend the `Problem` class and implement the constructor (`__init__`) and the methods `make_model` and `evaluate`. The `make_model` method formulates the problem in Amplify SDK and the `evaluate` method evaluates the formulated model with the solution as input.
+問題クラスは `Problem` クラスを継承し、コンストラクタ (`__init__`) と `make_model` と `evaluate` メソッドを実装する必要があります。`make_model` メソッドは定式化を、`evaluate` メソッドは解を入力として、定式化したモデルに対する評価を行います。
 
-The following code snippet is from the implementation of the [Traveling Salesman Problem class](amplify_bench/problem/tsp.py) included in the Amplify benchmark.
+次のコードは Amplify Benchmark に内蔵されている[巡回セールスマン問題クラス](amplify_bench/problem/tsp.py)の実装の抜粋です。
 
 ```python
 class Tsp(Problem):
@@ -328,36 +328,36 @@ class Tsp(Problem):
 ...
 ```
 
-#### Constructor
+#### コンストラクタ
 
 ```python
 def __init__(self, instance: str, **kwargs) -> None
 ```
 
-The constructor must accept at least an `instance: str` argument. Otherwise, if you add `constraint_weight: float` to the constructor arguments for example, the `parameters` key in `ProblemObject` can have a `constraint_weight`.
+コンストラクタの引数は少なくとも `instance: str` 引数を受け取る必要があります。それ以外で、例えばコンストラクタの引数に `constraint_weight: float` を追加した場合は、`ProblemObject` の `parameters` キーには `constraint_weight` が指定可能になります。
 
-#### `make_model` method
+#### `make_model` メソッド
 
 ```python
 def make_model(self) -> None
 ```
 
-The `make_model` method is responsible for formulating and storing an instance of the `amplify.BinaryQuadraticModel` class in `self._model`.
+`make_model` メソッドは定式化を行い `self._model` に`amplify.BinaryQuadraticModel` クラスのインスタンスを格納する責務があります。
 
-#### `evaluate` method
+#### `evaluate` メソッド
 
 ```python
 def evaluate(self, solution: amplify.SolverSolution) -> Dict[str, Union[None, float, str]]
 ```
-The `evaluate` method takes and evaluates a `amplify.SolverSolution`. The return value can be any key and value as `Dict[str, Union[None, float, str]]`. The return value is output to the `objective_value` key in the JSON file of the benchmark result.
+`evaluate` メソッドは `amplify.SolverSolution` を受け取り解の評価を行います。返り値は `Dict[str, Union[None, float, str]]` として任意のキーと値を返すことが出来ます。返り値はベンチマーク結果の JSON ファイルにおいて `objective_value` キーに出力されます。
 
-## Contributing
+## プロジェクトへのコントリビューション
 
-Amplify Benchmark is an open source project. Contributions are welcome, including bug reports, feature additions, documentation improvements, etc.
+Amplify Benchmark はオープンソースプロジェクトです。バグの報告や機能の追加、ドキュメントの改善等、コントリビューションを歓迎します。
 
-## Developed by
+## 開発元
 
-The Amplify benchmark project ties together:
+関連プロジェクト:
 
 * [Fixstars Amplify SDK](https://amplify.fixstars.com/sdk)
 * [Fixstars Amplify Annealing Engine](https://amplify.fixstars.com/engine)

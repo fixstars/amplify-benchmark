@@ -1,0 +1,10 @@
+jobs:
+  - problem:
+      class: Tsp
+      instance: eil51
+    client:
+      - FixstarsClient
+      - token: INPUT_API_TOKEN
+        parameters:
+          timeout: 3000
+    num_samples: 2
