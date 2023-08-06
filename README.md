@@ -219,12 +219,12 @@ jobs:
 ```
 
 > **Note**
-> それぞれの `Client` クラスにおける設定可能なプロパティ値は [ドキュメント](https://amplify.fixstars.com/ja/docs/client.html) を参照してください。
+> See the [documentation](https://amplify.fixstars.com/ja/docs/client.html) for the available properties for each `Client` class.
 
 
 #### `ProblemObject`
 
-`problem` キーには以下のキーで構成されるオブジェクトを与えます。
+The `problem` key has an object consisting of the following keys:
 
 | key          | type     | description                                 |
 | ------------ | -------- | ------------------------------------------- |
