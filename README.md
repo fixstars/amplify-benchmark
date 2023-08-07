@@ -29,6 +29,7 @@ Pre-defined benchmark sets:
 * Max-CUT Problem: [Gset](https://web.stanford.edu/~yyye/yyye/Gset/)
 * Capacitated Vehicle Routing Problem: [CVRPLIB](http://vrp.galgos.inf.puc-rio.br/index.php/en/)
 * Quadratic Problem: [QPLIB](https://qplib.zib.de/)
+* Sudoku (logic-based combinatorial number-placement puzzle)
 
 Supported solvers powered by Amplify SDK:
 
@@ -80,9 +81,9 @@ Commands:
   stats     Generate QUBO benchmark stats data.
 ```
 
-To run a benchmark, you have to create a benchmark definition ("job set") file. The `example/benchmark.yml` file contains a sample job set file.
+To run a benchmark, you have to create a benchmark definition ("job set") file. The [`example/benchmark.yml`](example/benchmark.yml) file contains a sample job set file.
 
-`example/benchmark.yml`
+[`example/benchmark.yml`](example/benchmark.yml)
 
 ```yaml
 jobs:
@@ -192,7 +193,7 @@ jobs:
 | ------------- | --------------- | ----------------------------------------------- |
 | `num_samples` | `int`           | the number of runs                              |
 | `client`      | `array`         | client name and parameters                      |
-| `problem`     | `ProblemObject` | te problem                                      |
+| `problem`     | `ProblemObject` | the problem definition                          |
 | `matrix`      | `object[array]` | the definitions of variable patterns (Optional) |
 
 If `num_samples` is an integer greater than 1, it will be run multiple times with the same settings. The `matrix` key is given with the patterns of variables explained later.
@@ -229,7 +230,7 @@ The `problem` key has an object consisting of the following keys:
 | key          | type     | description                                 |
 | ------------ | -------- | ------------------------------------------- |
 | `class`      | `string` | The name of the problem class               |
-| `insrance`   | `string` | Instance name                               |
+| `instance`   | `string` | Instance name                               |
 | `parameters` | `object` | Constructor parameters of the problem class |
 
 The `class` is the name of the problem class contained in [`amplify_bench/problem`](https://github.com/fixstars/amplify-benchmark/tree/main/amplify_bench/problem). The predefined problem classes are `Tsp` (TSPLIB), `Qap` (QAPLIB), `Cvrp` (CVRPLIB), `MaxCut` (GSET), `Sudoku` and `Qplib` (QPLIB). The `instance` is the name of the instance in the problem set corresponding to each problem class. See [`amplify_bench/problem/data`](amplify_bench/problem/data) for details. Problem classes may have formulation parameters that can be passed to the constructor, which can be specified by `parameter` key.

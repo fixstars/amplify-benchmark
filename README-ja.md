@@ -29,6 +29,7 @@ Fixstars Amplify Benchmark は二次計画問題 (QUBO) の求解性能のベン
 * 最大カット問題: [Gset](https://web.stanford.edu/~yyye/yyye/Gset/)
 * 容量制約付き配車ルート問題: [CVRPLIB](http://vrp.galgos.inf.puc-rio.br/index.php/en/)
 * 二次計画問題: [QPLIB](https://qplib.zib.de/)
+* 数独 (ペンシルパズル)
 
 Amplify SDK により対応するソルバー:
 
@@ -229,7 +230,7 @@ jobs:
 | key          | type     | description      |
 | ------------ | -------- | ---------------- |
 | `class`      | `string` | 問題クラス名     |
-| `insrance`   | `string` | インスタンス名   |
+| `instance`   | `string` | インスタンス名   |
 | `parameters` | `object` | 定式化パラメータ |
 
 `class` には [`amplify_bench/problem`](amplify_bench/problem) に含まれる問題クラス名を指定します。フレームワークにで事前に定義されている問題クラスは、`Tsp` (TSPLIB), `Qap` (QAPLIB), `Cvrp` (CVRPLIB), `MaxCut` (GSET), `Sudoku`, `Qplib` (QPLIB) です。`instance` にはそれぞれの問題クラスに対応する問題セットに含まれるインスタンス名を記述します。詳細は [`amplify_bench/problem/data`](amplify_bench/problem/data) を参照してください。問題クラスにはコンストラクタに与える定式化のパラメータを指定出来ることがあり、`parameter` で指定します。
