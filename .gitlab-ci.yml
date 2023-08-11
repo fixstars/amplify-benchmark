@@ -35,7 +35,7 @@ python-test:
   script:
     - pip install pipenv
     - pipenv install --dev --skip-lock
-    - pipenv run pytest --cov=src --cov-report term --cov-report xml:coverage.xml test/
+    - pipenv run pytest --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test/
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
@@ -55,8 +55,8 @@ python-test-full:
   script:
     - pip install pipenv
     - pipenv install --dev --skip-lock
-    # - pipenv run pytest --runslow --cov=src --cov-report term --cov-report xml:coverage.xml test/
-    - pipenv run pytest --cov=src --cov-report term --cov-report xml:coverage.xml test/
+    # - pipenv run pytest --runslow --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test/
+    - pipenv run pytest --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test/
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
