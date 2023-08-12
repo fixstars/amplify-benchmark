@@ -8,12 +8,12 @@ import time
 from functools import wraps
 from logging import INFO, basicConfig, getLogger
 
-basicConfig(level=INFO, format="{asctime} [pid:{pid}] [{levelname:.4}]: {message}", style="{")
+basicConfig(level=INFO, format="{asctime} [pid:{process}] [{levelname:.4}]: {message}", style="{")
 logger = getLogger(__name__)
 
 
 def print_log(message: str):
-    logger.info(message, extra={"pid": os.getpid()})
+    logger.info(message)
 
 
 def timer(func):
