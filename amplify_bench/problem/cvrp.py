@@ -200,7 +200,7 @@ def load_cvrp_file(filepath) -> Tuple[int, int, np.ndarray, list, dict, int]:
 
     # convert into a networkx.Graph
     graph = problem.get_graph()
-    distances = np.array(networkx.to_numpy_matrix(graph))
+    distances = networkx.to_numpy_array(graph)
 
     return capacity, dimension, distances, list(demand.values()), coord, depot
 

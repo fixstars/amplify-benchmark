@@ -117,7 +117,7 @@ def load_tsp_file(problem_file: str) -> Tuple[int, np.ndarray, Optional[np.ndarr
 
     # convert into a networkx.Graph
     graph = problem.get_graph()
-    distance_matrix = np.array(networkx.to_numpy_matrix(graph))
+    distance_matrix = networkx.to_numpy_array(graph)
 
     if problem.is_depictable():
         locations_dict: dict = dict()
