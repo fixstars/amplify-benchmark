@@ -127,9 +127,12 @@ class ClientConfig:
         For the convenience of calling from within a parallel process,
         the client object is not placed in a member variable.
         """
-        m = importlib.import_module("amplify.client")
-        client_class = getattr(m, self.name)
-
+        if self.name == "DWaveSamplerClient" or self.name == "LeapHybridSamplerClient":
+            m = importlib.import_module("amplify.client.ocean")
+            client_class = getattr(m, self.name)
+        else:
+            m = importlib.import_module("amplify.client")
+            client_class = getattr(m, self.name)
         client = client_class()
         for k, v in self.settings.items():
             _set_client_attr(client, k, v)

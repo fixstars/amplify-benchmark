@@ -306,7 +306,7 @@ def format_result_json_to_stats_json(result_json):
                 lambda x: sum(
                     [
                         1
-                        if x["target_energy"][i] == x["target_energy"][i] and (x["target_energy"][i] <= x["best_known"])
+                        if x["best_known"] is not None and not np.isnan(x["target_energy"][i]) and (x["target_energy"][i] <= x["best_known"])
                         else 0
                         for i in range(x["num_samples"])
                     ]
@@ -326,7 +326,7 @@ def format_result_json_to_stats_json(result_json):
                     "broken": x["broken"][i],
                 }
                 for i in range(x["num_samples"])
-                if x["target_energy"][i] == x["target_energy"][i]
+                if not np.isnan(x["target_energy"][i])
             ],
             axis=1,
         )
@@ -339,7 +339,7 @@ def format_result_json_to_stats_json(result_json):
             num_reach_target = sum(
                 [
                     1
-                    if x["target_energy"][i] == x["target_energy"][i]
+                    if x["best_known"] is not None and not np.isnan(x["target_energy"][i])
                     and (x["target_energy"][i] <= x["best_known"] + abs(x["best_known"] * target_percentage / 100))
                     else 0
                     for i in range(x["num_samples"])

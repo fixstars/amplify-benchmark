@@ -17,4 +17,4 @@ twine = "*"
 build = "*"
 
 [packages]
-amplify-benchmark = {editable=true, path="."}
+amplify-bench = {editable=true, path="."}
