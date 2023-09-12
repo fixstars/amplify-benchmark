@@ -1,0 +1,30 @@
+variables:
+  NUM_SAMPLES: 1
+  FIXSTARS:
+    - FixstarsClient
+    - parameters:
+        timeout: $TIMEOUT_AE
+  FUJITSU_DA4:
+    - FujitsuDA3SolverClient
+    - token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      parameters:
+        time_limit_sec: $TIMELIMIT_DA4
+jobs:
+  - problem:
+      class: MaxCut
+      instance: $INSTANCE
+    client: $CLIENT
+    num_samples: $NUM_SAMPLES
+    matrix:
+      INSTANCE:
+        - G1
+        - G11
+      CLIENT:
+        - $FIXSTARS
+        - $FUJITSU_DA4
+      TIMEOUT_AE:
+        - 1000
+        - 2000
+      TIMELIMIT_DA4:
+        - 1
+        - 2

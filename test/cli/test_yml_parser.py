@@ -142,3 +142,60 @@ def test_yml_parser():
     case = TestCase()
     ret = parse_input_data(input_path)
     case.assertCountEqual(ret, expected)
+
+    # deprecated matrix
+    input_filename = "deprecated_matrix.yml"
+    input_path = Path(__file__).parent / ".." / "data" / input_filename
+    expected = [
+        (
+            gen_problem("MaxCut", "G1"),
+            get_client_config({}, {"timeout": 1000}, "FixstarsClient"),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G1"),
+            get_client_config({}, {"timeout": 2000}, "FixstarsClient"),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G11"),
+            get_client_config({}, {"timeout": 1000}, "FixstarsClient"),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G11"),
+            get_client_config({}, {"timeout": 2000}, "FixstarsClient"),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G1"),
+            get_client_config(
+                {"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}, {"time_limit_sec": 1}, "FujitsuDA3SolverClient"
+            ),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G1"),
+            get_client_config(
+                {"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}, {"time_limit_sec": 2}, "FujitsuDA3SolverClient"
+            ),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G11"),
+            get_client_config(
+                {"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}, {"time_limit_sec": 1}, "FujitsuDA3SolverClient"
+            ),
+            1,
+        ),
+        (
+            gen_problem("MaxCut", "G11"),
+            get_client_config(
+                {"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}, {"time_limit_sec": 2}, "FujitsuDA3SolverClient"
+            ),
+            1,
+        ),
+    ]
+    case = TestCase()
+    ret = parse_input_data(input_path)
+    case.assertCountEqual(ret, expected)

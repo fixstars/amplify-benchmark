@@ -13,6 +13,8 @@ from typing import Any, List, Tuple, Union
 import yaml
 from jsonschema import validate
 
+from amplify_bench.util import dict_to_hash
+
 from ..client_config.base import ClientConfig, get_client_config
 from ..problem.base import Problem, gen_problem
 from ..timer import timer
@@ -57,6 +59,7 @@ def parse_input_data(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
         num_samples_list = []
         matrix = job["matrix"] if "matrix" in job.keys() else {}
         matrix = [dict(zip(matrix.keys(), r)) for r in product(*matrix.values())]
+        job_hash_list = []
         for m in matrix:
             # matrixキーを除いてコピー
             d = {k: v for k, v in job.items() if k != "matrix"}
@@ -68,6 +71,11 @@ def parse_input_data(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
                 d = replace_recursive(d, variables)
             except RecursionError:
                 raise ValueError("detect circular reference in input data")
+            h = dict_to_hash(d)
+            if h in job_hash_list:
+                continue
+            else:
+                job_hash_list.append(h)
             _validation({"jobs": [d]})
             problem_parameters = d["problem"]["parameters"] if "parameters" in d["problem"].keys() else {}
             problem_list.append(gen_problem(d["problem"]["class"], d["problem"]["instance"], **problem_parameters))
