@@ -194,6 +194,14 @@
                     }
                 }
             }
+        },
+        "imports": {
+            "type": "array",
+            "description": "List of files to import before running the benchmark",
+            "items": {
+                "type": "string",
+                "pattern": ".*\\.py$"
+            }
         }
     }
 }

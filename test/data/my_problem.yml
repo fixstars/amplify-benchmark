@@ -1,0 +1,28 @@
+imports:
+  - mytsp.py
+  - mysample.py
+variables:
+  NUM_SAMPLES: 1
+  CLIENT:
+    - FixstarsClient
+    - parameters:
+        outputs:
+          feasibilities: true
+        timeout: $TIMEOUT
+jobs:
+  - problem:
+      class: MyTsp
+      instance: random8
+    client: $CLIENT
+    num_samples: $NUM_SAMPLES
+    matrix:
+      TIMEOUT:
+        - 1000
+  - problem:
+      class: MySample
+      instance: random10
+    client: $CLIENT
+    num_samples: $NUM_SAMPLES
+    matrix:
+      TIMEOUT:
+        - 1000

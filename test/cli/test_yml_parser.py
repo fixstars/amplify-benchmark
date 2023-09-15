@@ -196,6 +196,21 @@ def test_yml_parser():
             1,
         ),
     ]
-    case = TestCase()
+    # test variable
+    input_filename = "my_problem.yml"
+    input_path = Path(__file__).parent / ".." / "data" / input_filename
     ret = parse_input_data(input_path)
+    expected = [
+        (
+            gen_problem("MyTsp", "random8"),
+            get_client_config({}, {"outputs": {"feasibilities": True}, "timeout": 1000}, "FixstarsClient"),
+            1,
+        ),
+        (
+            gen_problem("MySample", "random10"),
+            get_client_config({}, {"outputs": {"feasibilities": True}, "timeout": 1000}, "FixstarsClient"),
+            1,
+        ),
+    ]
+    case = TestCase()
     case.assertCountEqual(ret, expected)

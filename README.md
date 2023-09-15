@@ -101,17 +101,16 @@ jobs:
 The benchmark job set file contains a list of benchmark jobs in YAML or JSON file format. The jobs consist of the number of runs, a list of problems to solve, and parameter values passed to the [Client class](https://amplify.fixstars.com/docs/client.html) to run. For this job set, it consists of the following benchmark jobs:
 
 * target problem:
-  * `TSPLIB`: `eil51` instance
+    * `TSPLIB`: `eil51` instance
 * number of runs: 2
 * [`FixstarsClient`](https://amplify.fixstars.com/docs/client.html#fixstars)
-  * `token`: INPUT_API_TOKEN
-  * `parameter.timeout`: 3000
+    * `token`: INPUT_API_TOKEN
+    * `parameter.timeout`: 3000
 
 Now to start the benchmark using this job set file, run the `amplify-bench` command with the `run` subcommand with the path to the job set file.
 
 > **Note**
 > Replace `INPUT_API_TOKEN` with your API token. If you do not have an API token, go to [Amplify WEB site](https://amplify.fixstars.com/) and [create an account](https://amplify.fixstars.com/ja/register).
-
 
 ```bash
 $ amplify-bench run benchmark.yml
@@ -152,7 +151,6 @@ Then, drag and drop the created `report/data.json` file into the Amplify Benchma
 | ----------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------ |
 | <img src="docs/screenshots/upload.png" width="600px"> | <img src="docs/screenshots/problem_list.png" width="600px"> | <img src="docs/screenshots/problem.png" width="600px"> |
 
-
 ## Advanced usage
 
 ### job set file in details
@@ -165,6 +163,7 @@ A job set file consisted of JSON objects with the following keys. The schema of 
 | ----------- | ------------------ | -------------------------------------------------- |
 | `jobs`      | `array[JobObject]` | list of benchmark jobs                             |
 | `variables` | `object`           | definitions of variables used in `jobs` (Optional) |
+| `imports`   | `array[string]`    | User-defined problem file path (Optional)          |
 
 Variable definitions for the `variables` key can be referenced in `jobs`. A string starting with `$` is treated as a variable name. This is useful, for example, to specify a setting that is commonly used in multiple jobs
 
@@ -186,6 +185,8 @@ jobs:
     client: $CLIENT
     num_samples: 1
 ```
+
+`imports` specifies the list of paths to the user-defined problem file. Enter the path as a relative path from a job set file, a relative path from the current directory, or an absolute path. For details on user-defined question files, see [Create your own benchmark problems](#create-your-own-benchmark-problems).
 
 #### `JobObject`
 
@@ -221,7 +222,6 @@ jobs:
 
 > **Note**
 > See the [documentation](https://amplify.fixstars.com/ja/docs/client.html) for the available properties for each `Client` class.
-
 
 #### `ProblemObject`
 
@@ -264,33 +264,41 @@ jobs:
 
 The `matrix` is an array of values with the variable names as keys. In this case, jobs with `timeout` of `10000` and `30000` will be created for `esc32a` and `sko56` respectively. Note that you can refer to the variables you pass to `matrix` in the variables defined in `variables`.
 
-
 > **Note**
 > Variables are referenced recursively, but an infinite loop will fail.
 
 ### Create your own benchmark problems
 
-User-defined formulations can be added as benchmark problems that are recognized in Amplify Benchmark by placing a Python file under [`amplify_bench/problem`](amplify_bench/problem) containing the problem class formulated using the Amplify SDK.
+User-defined formulations can be added as benchmark problems that are recognized in Amplify Benchmark.
 
-First, clone the repository to add the Python files to Amplify Benchmark.
+The following example runs a benchmark against the `MyTsp` class defined in the `mytsp.py` file. Setting a list of Python file paths to the `imports` key will load additional probem classes defined in the files. A file path must be specified as an absolute path or relative to the job set file or the current directory.
 
-```bash
-$ git clone https://github.com/fixstars/amplify-benchmark.git
+```yaml
+imports:
+  - mytsp.py
+jobs:
+  - problem:
+      class: MyTsp
+      instance: random8
 ```
 
-First, place any Python file under [`amplify_bench/problem`](amplify_bench/problem). The file name must be the same as the problem class name and must be in lowercase. For example, to add a `Xyz` problem class, the file name should be `amplify_bench/problem/xyz.py`.
+> **Note**
+> User-defined class names should not duplicate the built-in problem classes.
 
 The problem class must extend the `Problem` class and implement the constructor (`__init__`) and the methods `make_model` and `evaluate`. The `make_model` method formulates the problem in Amplify SDK and the `evaluate` method evaluates the formulated model with the solution as input.
 
-The following code snippet is from the implementation of the [Traveling Salesman Problem class](amplify_bench/problem/tsp.py) included in the Amplify benchmark.
+The following code snippet is an example of a `MyTsp` problem class.
+
+`mytsp.py`
 
 ```python
-class Tsp(Problem):
+class MyTsp(Problem):
     def __init__(
         self,
         instance: str,
         constraint_weight: float = 1.0,
-        seed: int = 0,        path: Optional[str] = None,
+        seed: int = 0,
+        path: Optional[str] = None,
     ):
         super().__init__()
         self._instance: str = instance
@@ -306,7 +314,6 @@ class Tsp(Problem):
         self._best_known = best_known
 
     def make_model(self):
-        print_log(f"make model of {self._instance}")
         symbols, model = make_tsp_model(self._ncity, self._distances, self._problem_parameters["constraint_weight"])
         self._symbols = symbols
         self._model = model
@@ -350,6 +357,7 @@ The `make_model` method is responsible for formulating and storing an instance o
 ```python
 def evaluate(self, solution: amplify.SolverSolution) -> Dict[str, Union[None, float, str]]
 ```
+
 The `evaluate` method takes and evaluates a `amplify.SolverSolution`. The return value can be any key and value as `Dict[str, Union[None, float, str]]`. The return value is output to the `objective_value` key in the JSON file of the benchmark result.
 
 ## Contributing

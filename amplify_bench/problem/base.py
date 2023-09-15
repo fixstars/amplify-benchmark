@@ -6,7 +6,8 @@
 import copy
 import importlib
 from abc import ABC, abstractmethod
-from typing import Union
+from types import ModuleType
+from typing import List, Union
 
 from amplify import BinaryIntPolyArray  # type: ignore
 from amplify import BinaryIntQuadraticModel  # type: ignore
@@ -34,6 +35,13 @@ AmplifyPolyArrayType = Union[
     IsingIntPolyArray,
 ]
 
+__external_modules: List[ModuleType] = []
+
+
+def set_external_module(modeules: List[ModuleType]) -> None:
+    global __external_modules
+    __external_modules = modeules
+
 
 class Problem(ABC):
     def __init__(self):
@@ -44,7 +52,7 @@ class Problem(ABC):
 
     def __eq__(self, other):
         return (
-            (type(self) is type(other))
+            isinstance(self, type(other))
             and (self._instance == other._instance)
             and (self._problem_parameters == other._problem_parameters)
             and (self._best_known == other._best_known)
@@ -82,6 +90,7 @@ def gen_problem(name: str, instance: str, **kargs):
 
     Args:
         name (str): Problem Class name
+        instance (str): Problem instance name
 
     Raises:
         RuntimeError: problem class {name} is not supported.
@@ -93,5 +102,10 @@ def gen_problem(name: str, instance: str, **kargs):
     if hasattr(module, name):
         problem_class = getattr(module, name)
         return problem_class(instance, **kargs)
-    else:
-        raise RuntimeError(f"Problem class {name} is not supported.")
+
+    for module in __external_modules:
+        if hasattr(module, name):
+            problem_class = getattr(module, name)
+            return problem_class(instance, **kargs)
+
+    raise RuntimeError(f"Problem class {name} is not supported.")

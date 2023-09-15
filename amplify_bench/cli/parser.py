@@ -6,6 +6,9 @@ from __future__ import annotations
 
 import copy
 import json
+import os
+from importlib.machinery import SourceFileLoader
+from importlib.util import module_from_spec, spec_from_file_location
 from itertools import product
 from pathlib import Path
 from typing import Any, List, Tuple, Union
@@ -16,7 +19,7 @@ from jsonschema import validate
 from amplify_bench.util import dict_to_hash
 
 from ..client_config.base import ClientConfig, get_client_config
-from ..problem.base import Problem, gen_problem
+from ..problem.base import Problem, gen_problem, set_external_module
 from ..timer import timer
 
 
@@ -51,6 +54,22 @@ def parse_input_data(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
         raise ValueError(f"invalid file extension: {filepath.suffix} must be .json or .yml or .yaml")
     _validation(j)
     global_variables = j["variables"] if "variables" in j.keys() else {}
+    import_files = j["imports"] if "imports" in j.keys() else []
+    modules = []
+    for file_path in import_files:
+        if os.path.exists(filepath.parent / file_path):
+            file_path = filepath.parent / file_path
+        elif os.path.exists(file_path):
+            file_path = Path(file_path)
+        else:
+            raise ValueError(f"import file not found: {file_path}")
+        loader = SourceFileLoader(str(file_path), str(file_path))
+        spec = spec_from_file_location(str(file_path), file_path, loader=loader)
+        module = module_from_spec(spec)  # type: ignore
+        spec.loader.exec_module(module)  # type: ignore
+        modules.append(module)
+    set_external_module(modules)
+
     jobs = j["jobs"]
     ret = []
     for job in jobs:

@@ -101,17 +101,16 @@ jobs:
 ベンチマークジョブセットファイルには YAML あるいは JSON ファイル形式でベンチマークジョブのリストを記述します。ジョブは実行回数、ベンチマーク対象の問題リスト、実行する [Client クラス](https://amplify.fixstars.com/docs/client.html) に与える設定値で構成されています。このジョブセットの場合、次のベンチマークジョブで構成されます。
 
 * 対象の問題
-  * `TSPLIB`: `eil51` instance
+    * `TSPLIB`: `eil51` instance
 * 実行回数: 2
 * 実行するクライアント: [`FixstarsClient`](https://amplify.fixstars.com/docs/client.html#fixstars)
-  * `token`: INPUT_API_TOKEN
-  * `parameter.timeout`: 3000
+    * `token`: INPUT_API_TOKEN
+    * `parameter.timeout`: 3000
 
 それでは、このジョブセットファイルを用いてベンチマークを実行してみましょう。`amplify-bench` コマンドの `run` サブコマンドにジョブセットファイルのパス与えて実行します。
 
 > **Note**
 > `INPUT_API_TOKEN` を自身の API トークンで置き換えてください。トークンを未入手の場合は、[Amplify WEBサイト](https://amplify.fixstars.com/) にアクセスし、[アカウントを作成](https://amplify.fixstars.com/ja/register)してください。
-
 
 ```bash
 $ amplify-bench run benchmark.yml
@@ -152,7 +151,6 @@ $ amplify-bench stats preset_20230803_223440.json
 | ----------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------ |
 | <img src="docs/screenshots/upload.png" width="600px"> | <img src="docs/screenshots/problem_list.png" width="600px"> | <img src="docs/screenshots/problem.png" width="600px"> |
 
-
 ## 高度な使い方
 
 ### ジョブセットファイルの書き方
@@ -161,10 +159,11 @@ $ amplify-bench stats preset_20230803_223440.json
 
 ジョブセットファイルには下記のキーを持つ JSON オブジェクトを記述します。ジョブセットファイルのスキーマは [`amplify_bench/cli/schemas`](amplify_bench/cli/schemas) に記述されています。
 
-| key         | type               | description                             |
-| ----------- | ------------------ | --------------------------------------- |
-| `jobs`      | `array[JobObject]` | ベンチマークジョブのリスト              |
-| `variables` | `object`           | ジョブで使用可能な変数の定義 (Optional) |
+| key         | type               | description                                 |
+| ----------- | ------------------ | ------------------------------------------- |
+| `jobs`      | `array[JobObject]` | ベンチマークジョブのリスト                  |
+| `variables` | `object`           | ジョブで使用可能な変数の定義 (Optional)     |
+| `imports`   | `array[string]`    | ユーザー定義の問題のファイルパス (Optional) |
 
 `variables` キーに与える変数定義は `jobs` 内で参照することが出来ます。この時、`$` から始まる文字列は変数名として扱われます。例えば次のように全ての問題に共通する設定を与えるときに有用です。
 
@@ -186,6 +185,8 @@ jobs:
     client: $CLIENT
     num_samples: 1
 ```
+
+`imports`にはユーザー定義の問題ファイルのパスのリストを指定します。パスは本ジョブセットファイルからの相対パス、カレントディレクトリからの相対パス、または絶対パスで記載します。ユーザー定義の問題ファイルの詳細は[ユーザ定義問題の追加](#ユーザ定義問題の追加)を参照してください。
 
 #### `JobObject`
 
@@ -221,7 +222,6 @@ jobs:
 
 > **Note**
 > それぞれの `Client` クラスにおける設定可能なプロパティ値は [ドキュメント](https://amplify.fixstars.com/ja/docs/client.html) を参照してください。
-
 
 #### `ProblemObject`
 
@@ -264,33 +264,40 @@ jobs:
 
 `matrix` には変数名をキーにして、値を配列で与えます。この場合、`esc32a` と `sko56` それぞれに対して、`timeout` が `10000` と `30000` のジョブが生成されます。`variables` に定義されている変数の中で `matrix` に与えている変数を参照できることに注意してください。
 
-
 > **Note**
 > 変数の参照は再帰的に行われますが、無限ループが発生するとエラーになります。
 
 ### ユーザ定義問題の追加
 
-ベンチマーク問題としてユーザが定義した定式化を追加することが出来ます。Amplify SDK を用いて定式化した問題クラスを `amplify_bench/problem` 以下に Python ファイルとして配置することで、Amplify Benchmark から認識されます。
+ユーザが定義した定式化をベンチマーク問題として追加することが出来ます。
 
-まず、Amplify Benchmark に Python ファイルを追加するためにリポジトリをクローンします。
+次の例では `mytsp.py` ファイルで定義された `MyTsp` クラスに対するベンチマークが実行されます。`imports` キーには問題クラスが定義されたファイルパスを指定します。ファイルパスは絶対パスあるいはジョブセットファイルまたはカレントディレクトリからの相対パスで指定してください。
 
-```bash
-$ git clone https://github.com/fixstars/amplify-benchmark.git
+```yaml
+imports:
+  - mytsp.py
+jobs:
+  - problem:
+      class: MyTsp
+      instance: random8
 ```
 
-最初に `amplify_bench/problem` 以下に、任意の Python ファイルを配置します。ファイル名は問題クラス名と同じで小文字にする必要があります。例えば、`Xyz` 問題を追加する場合、`amplify_bench/problem/xyz.py` というファイル名にします。
+> **Note**
+> ユーザ定義のクラス名はフレームワークに内蔵の問題クラスと重複しないようにしてください。
 
-問題クラスは `Problem` クラスを継承し、コンストラクタ (`__init__`) と `make_model` と `evaluate` メソッドを実装する必要があります。`make_model` メソッドは定式化を、`evaluate` メソッドは解を入力として、定式化したモデルに対する評価を行います。
+問題クラスは `Problem` クラスを継承し、コンストラクタ (`__init__`) と `make_model` と `evaluate` メソッドを実装する必要があります。`make_model` メソッドはAmplify SDK を用いた定式化を、`evaluate` メソッドは解を入力として、定式化したモデルに対する評価を行います。
 
-次のコードは Amplify Benchmark に内蔵されている[巡回セールスマン問題クラス](amplify_bench/problem/tsp.py)の実装の抜粋です。
+次のコードは `MyTsp` 問題クラスの例です。
+
+`mytsp.py`
 
 ```python
-class Tsp(Problem):
+class MyTsp(Problem):
     def __init__(
         self,
         instance: str,
         constraint_weight: float = 1.0,
-        seed: int = 0,        path: Optional[str] = None,
+        seed: int = 0,
     ):
         super().__init__()
         self._instance: str = instance
@@ -299,14 +306,13 @@ class Tsp(Problem):
             self._problem_parameters["seed"] = seed
         self._symbols = None
 
-        ncity, distances, locations, best_known = self.__load(self._instance, seed, path)
+        ncity, distances, locations, best_known = self.__load(self._instance, seed)
         self._ncity = ncity
         self._distances = distances
         self._locations = locations  # not used
         self._best_known = best_known
 
     def make_model(self):
-        print_log(f"make model of {self._instance}")
         symbols, model = make_tsp_model(self._ncity, self._distances, self._problem_parameters["constraint_weight"])
         self._symbols = symbols
         self._model = model
@@ -350,6 +356,7 @@ def make_model(self) -> None
 ```python
 def evaluate(self, solution: amplify.SolverSolution) -> Dict[str, Union[None, float, str]]
 ```
+
 `evaluate` メソッドは `amplify.SolverSolution` を受け取り解の評価を行います。返り値は `Dict[str, Union[None, float, str]]` として任意のキーと値を返すことが出来ます。返り値はベンチマーク結果の JSON ファイルにおいて `objective_value` キーに出力されます。
 
 ## プロジェクトへのコントリビューション
