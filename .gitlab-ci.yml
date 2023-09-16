@@ -20,10 +20,10 @@ upload test-pypi:
   script:
     - git clean -xfd
     - pip install pipenv
-    - pipenv --rm || true
-    - pipenv install --dev --python 3.8
-    - pipenv run python -m build --wheel
-    - pipenv run twine upload --skip-existing --username $TESTPYPI_USERNAME --password $TESTPYPI_PASSWORD --repository testpypi dist/*
+    - pipenv lock --dev
+    - pipenv install --system --dev
+    - python -m build --wheel
+    - twine upload --skip-existing --username $TESTPYPI_USERNAME --password $TESTPYPI_PASSWORD --repository testpypi dist/*
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+.\d+.\d+/'
 
@@ -34,10 +34,9 @@ python-test:
   image: python:3.8
   script:
     - git clean -xfd
-    - pip install pipenv
-    - pipenv --rm || true
-    - pipenv install --dev --python 3.8
-    - pipenv run pytest --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test/
+    - pip install -e .
+    - pip install pytest pytest-cov
+    - pytest --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
@@ -56,11 +55,10 @@ python-test-full:
   image: python:3.8
   script:
     - git clean -xfd
-    - pip install pipenv
-    - pipenv --rm || true
-    - pipenv install --dev --python 3.8
-    # - pipenv run pytest --runslow --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test/
-    - pipenv run pytest --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test/
+    - pip install -e .
+    - pip install pytest pytest-cov
+    # - pipenv run pytest --runslow --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test
+    - pytest --cov=amplify_bench --cov-report term --cov-report xml:coverage.xml test
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
@@ -80,9 +78,9 @@ upload pypi:
   script:
     - git clean -xfd
     - pip install pipenv
-    - pipenv --rm || true
-    - pipenv install --dev --python 3.8
-    - pipenv run python -m build --wheel
+    - pipenv lock --dev
+    - pipenv install --system --dev
+    - python -m build --wheel
     - pipenv run twine upload --username $PYPI_USERNAME --password $PYPI_PASSWORD dist/*
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+.\d+.\d+/'
@@ -96,10 +94,10 @@ check-formatter:
   script:
     - git clean -xfd
     - pip install pipenv
-    - pipenv --rm || true
-    - pipenv install --dev --python 3.8
-    - pipenv run black --check amplify_bench/ && pipenv run isort --check amplify_bench/
-    - pipenv run black --check test/ && pipenv run isort --check test/
+    - pipenv lock --dev
+    - pipenv install --system --dev
+    - isort --check amplify_bench test
+    - black --check amplify_bench test
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -113,10 +111,11 @@ check-linter:
   script:
     - git clean -xfd
     - pip install pipenv
-    - pipenv --rm || true
-    - pipenv install --dev --python 3.8
-    - pipenv run flake8 amplify_bench/ && pipenv run mypy amplify_bench/
-    - pipenv run flake8 test/ && pipenv run mypy --explicit-package-bases test/
+    - pipenv lock --dev
+    - pipenv install --system --dev
+    - flake8 amplify_bench test
+    - mypy amplify_bench
+    - mypy --explicit-package-bases test
   rules:
     - if: $CI_COMMIT_TAG
       when: never

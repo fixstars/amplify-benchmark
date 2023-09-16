@@ -12,6 +12,7 @@ from .base import ClientConfig
 class DWaveSamplerClientConfig(ClientConfig):
     _timeout_like_name: str = "num_reads"
 
+
 @dataclass(frozen=True)
 class LeapHybridSamplerClientConfig(ClientConfig):
     _timeout_like_name: str = "time_limit"
