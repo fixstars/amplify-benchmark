@@ -1,0 +1,25 @@
+variables:
+  CLIENT:
+    - FixstarsClient
+    - parameters:
+        outputs:
+          feasibilities: $F
+        num_gpus: $NUM_GPUS_2023
+        timeout: $TIMEOUT
+jobs:
+  - problem:
+      class: MaxCut
+      instance: G$GSET_N
+    client: $CLIENT
+    num_samples: ${NUM_SAMPLES}
+    matrix:
+      TIMEOUT:
+        - 1000
+  - problem:
+      class: MaxCut
+      instance: G$GSET_N
+    client: $CLIENT
+    num_samples: ${NUM_SAMPLES}
+    matrix:
+      TIMEOUT:
+        - 3000

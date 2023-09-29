@@ -214,3 +214,29 @@ def test_yml_parser():
     ]
     case = TestCase()
     case.assertCountEqual(ret, expected)
+
+    # test environment variable
+    from unittest.mock import patch
+
+    with patch.dict("os.environ", {"NUM_SAMPLES": "1", "GSET_N": "11", "NUM_GPUS_2023": "8", "F": "true"}):
+        input_filename = "environment.yml"
+        input_path = Path(__file__).parent / ".." / "data" / input_filename
+        ret = parse_input_data(input_path)
+        expected = [
+            (
+                gen_problem("MaxCut", "G11"),
+                get_client_config(
+                    {}, {"outputs": {"feasibilities": True}, "num_gpus": 8, "timeout": 1000}, "FixstarsClient"
+                ),
+                1,
+            ),
+            (
+                gen_problem("MaxCut", "G11"),
+                get_client_config(
+                    {}, {"outputs": {"feasibilities": True}, "num_gpus": 8, "timeout": 3000}, "FixstarsClient"
+                ),
+                1,
+            ),
+        ]
+        case = TestCase()
+        case.assertCountEqual(ret, expected)

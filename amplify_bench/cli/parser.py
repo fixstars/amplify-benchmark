@@ -7,6 +7,7 @@ from __future__ import annotations
 import copy
 import json
 import os
+import re
 from importlib.machinery import SourceFileLoader
 from importlib.util import module_from_spec, spec_from_file_location
 from itertools import product
@@ -46,10 +47,15 @@ def replace_recursive(obj: Union[dict[str, Any], list[Any], str], variables: dic
 
 @timer
 def parse_input_data(filepath: Path) -> List[Tuple[Problem, ClientConfig, int]]:
+    with filepath.open() as f:
+        txt = f.read()
+    for i in set(re.findall(r"\${?([a-zA-Z_][a-zA-Z_0-9]*)}?", txt)):
+        if i in os.environ:
+            txt = re.sub(rf"\${{?{i}}}?", os.environ[i], txt)
     if filepath.suffix == ".json":
-        j = json.load(filepath.open())
+        j = json.loads(txt)
     elif filepath.suffix == ".yml" or filepath.suffix == ".yaml":
-        j = yaml.safe_load(filepath.open())
+        j = yaml.safe_load(txt)
     else:
         raise ValueError(f"invalid file extension: {filepath.suffix} must be .json or .yml or .yaml")
     _validation(j)
