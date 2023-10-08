@@ -165,7 +165,7 @@ A job set file consisted of JSON objects with the following keys. The schema of 
 | `variables` | `object`           | definitions of variables used in `jobs` (Optional) |
 | `imports`   | `array[string]`    | User-defined problem file path (Optional)          |
 
-Variable definitions for the `variables` key can be referenced in `jobs`. A string starting with `$` is treated as a variable name. This is useful, for example, to specify a setting that is commonly used in multiple jobs
+Strings in the file that begin with `$` are treated as variable names. Variables are first expanded by the environment variables at runtime, then the variable definitions given in the `variables` key are referenced in `jobs`. This is useful, for example, to specify a setting that is commonly used in multiple jobs
 
 ```yaml
 variables:
